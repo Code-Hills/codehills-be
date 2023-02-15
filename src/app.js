@@ -1,0 +1,10 @@
+const express = require("express");
+const routes = require("./routes/index");
+
+const app = express();
+
+app.use(routes);
+
+app.listen(3000, () => {
+  console.log("The app is listening on port 3000");
+});
