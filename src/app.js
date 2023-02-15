@@ -1,10 +1,14 @@
-const express = require("express");
-const routes = require("./routes/index");
+import bodyParser from "body-parser";
+import express from "express";
+import router from "./routes/index.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
-app.use(routes);
+app.use(bodyParser.json());
+app.use("/api", router);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("The app is listening on port 3000");
 });

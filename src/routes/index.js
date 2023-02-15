@@ -1,8 +1,7 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+import { welcomeController } from "../controllers/index.js";
+const router = Router();
 
-router.get("/", (req, res) => {
-  res.send("Welcome to codehills backend!");
-});
+router.get("/", welcomeController);
 
-module.exports = router;
+export default router;
