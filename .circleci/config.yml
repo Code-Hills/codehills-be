@@ -6,7 +6,7 @@ jobs:
     docker:
       - image: cimg/base:stable
       - image: cimg/node:19.6.0
-      - image: cimg/postgres:15.1.0
+      - image: cimg/postgres:15.1-postgis
         environment:
           POSTGRES_USER: myuser
           POSTGRES_DB: mydatabase
@@ -26,13 +26,6 @@ jobs:
       - run:
           name: Run tests
           command: yarn test
-      - deploy:
-          name: Deploy to Production
-          command: ./deploy.sh
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
   build:
     docker:
       - image: cimg/base:stable
@@ -50,16 +43,16 @@ jobs:
           command: |
             yarn build
 workflows:
+  version: 2
   test_and_build:
     jobs:
       - test
       - build
-      - deploy:
-          requires:
-            - test
-            - build
-          # filters:
-          #   branches:
-          #     only: develop
-    notify: false  
+      # - deploy:
+      #     requires:
+      #       - test
+      #       - build
+      #     # filters:
+      #     #   branches:
+      #     #     only: develop
   
