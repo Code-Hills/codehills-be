@@ -1,0 +1,58 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+jobs:
+  test:
+    docker:
+      - image: cimg/base:stable
+      - image: cimg/node:19.6.0
+      - image: cimg/postgres:15.1-postgis
+        environment:
+          POSTGRES_USER: myuser
+          POSTGRES_DB: mydatabase
+          POSTGRES_PASSWORD: mypassword
+    working_directory: ~/app
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+      - run:
+          name: Install packages
+          command: |
+            yarn install
+      - run:
+          name: Wait for Postgres
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Run tests
+          command: yarn test
+  build:
+    docker:
+      - image: cimg/base:stable
+      - image: cimg/node:19.6.0
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+      - run:
+          name: Install packages
+          command: |
+            yarn install
+      - run:
+          name: Build
+          command: |
+            yarn build
+workflows:
+  version: 2
+  test_and_build:
+    jobs:
+      - test
+      - build
+      # - deploy:
+      #     requires:
+      #       - test
+      #       - build
+      #     # filters:
+      #     #   branches:
+      #     #     only: develop
+  
