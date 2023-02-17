@@ -1,5 +1,5 @@
 import db from "../database/models/index";
-const User = db["User"];
+const User = db["Users"];
 
 export const welcomeController = (req, res) => {
   res.json({ message: "Welcome to codehills backend!" });
