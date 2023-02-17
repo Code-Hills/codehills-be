@@ -5,8 +5,11 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/app.js",
-    "start": "babel-node  src/app.js",
+    "build": "babel src --out-dir dist --source-maps inline --copy-files",
+    "start": "babel-node  dist/app.js",
     "test": "mocha --require @babel/register 'src/tests/**/*.test.js'",
+    "test:coverage": "nyc mocha --coverage --recursive --require @babel/polyfill --require @babel/register */tests/*.js --timeout 500000000 --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "migrate": "npx sequelize-cli db:migrate",
     "down": "npx sequelize-cli db:migrate:undo",
     "seed": "npx sequelize-cli db:seed:all"
@@ -22,9 +25,12 @@
   },
   "homepage": "https://github.com/denislohan/codehills-be#readme",
   "dependencies": {
+    "@babel/cli": "^7.20.7",
     "body-parser": "^1.20.1",
+    "coveralls": "^3.1.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "nyc": "^15.1.0",
     "pg": "^8.9.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^5.22.3"
@@ -32,6 +38,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/node": "^7.20.7",
+    "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.20.2",
     "@babel/register": "^7.18.9",
     "chai": "^4.3.7",
