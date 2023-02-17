@@ -27,6 +27,18 @@ jobs:
       - run:
           name: Run tests
           command: yarn test
+      - run:
+          name: Saving the coveralls
+          command: |
+            yarn test:coverage
+      # - run:
+      #     name: coverage
+      #     command: |
+      #       npx nyc report --reporter=text-lcov | npx coveralls
+      #   environment:
+      #     COVERALLS_REPO_TOKEN: $COVERALLS_REPO_TOKEN
+
+
       # - coveralls/upload
   build:
     docker:
