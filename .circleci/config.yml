@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.2
+  # coveralls: coveralls/coveralls@1.0.6
 jobs:
   test:
     docker:
@@ -26,6 +27,7 @@ jobs:
       - run:
           name: Run tests
           command: yarn test
+      # - coveralls/upload
   build:
     docker:
       - image: cimg/base:stable
