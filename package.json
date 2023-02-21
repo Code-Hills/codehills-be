@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/app.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build": "babel src --out-dir dist --source-maps inline --copy-files",
     "start": "babel-node  dist/app.js",
     "test": "mocha --require @babel/register 'src/tests/**/*.test.js'",
@@ -44,8 +46,12 @@
     "@babel/register": "^7.18.9",
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
+    "prettier": "^2.8.4",
     "sequelize-cli": "^5.5.1"
   }
 }

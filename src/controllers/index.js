@@ -1,8 +1,8 @@
-import db from "../database/models/index";
-const User = db["Users"];
+import db from '../database/models/index';
+const User = db['Users'];
 
 export const welcomeController = (req, res) => {
-  res.json({ message: "Welcome to codehills backend!" });
+  res.json({ message: 'Welcome to codehills backend!' });
 };
 
 export const addUser = async (req, res) => {
@@ -12,7 +12,7 @@ export const addUser = async (req, res) => {
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error adding user" });
+    res.status(500).json({ message: 'Error adding user' });
   }
 };
 
@@ -22,6 +22,6 @@ export const getAllUsers = async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: 'Server error' });
   }
 };
