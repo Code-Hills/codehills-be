@@ -4,6 +4,9 @@ import {
   getAllUsers,
   welcomeController,
 } from "../controllers/index.js";
+
+
+
 const router = Router();
 
 router.get("/", welcomeController);
