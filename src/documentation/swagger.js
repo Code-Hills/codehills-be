@@ -8,13 +8,8 @@ export default {
     version: "1.0.0",
     description: "CodeHills HR API documentation",
   },
-  servers: [
-    {
-      url: `http://localhost:${process.env.PORT || 4000}/api`,
-    },
-  ],
   paths: {
-    "/users": {
+    "/api/users": {
       get: {
         summary: "Gets all users in the database",
         tags: ["User"],
@@ -28,7 +23,7 @@ export default {
         },
       },
     },
-    "/users/add": {
+    "/api/users/add": {
       post: {
         summary: "Adds a user into the database",
         tags: ["Auth"],
