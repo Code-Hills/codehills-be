@@ -3,70 +3,53 @@ orbs:
   node: circleci/node@5.0.2
   # coveralls: coveralls/coveralls@1.0.6
 jobs:
-  test:
+  build:
     docker:
       - image: cimg/base:stable
       - image: cimg/node:19.6.0
-      - image: cimg/postgres:15.1-postgis
-        environment:
-          POSTGRES_USER: myuser
-          POSTGRES_DB: mydatabase
-          POSTGRES_PASSWORD: mypassword
     working_directory: ~/app
     steps:
       - checkout
       - node/install:
           install-yarn: true
-      - run:
-          name: Install packages
-          command: |
-            yarn install
-      - run:
-          name: Wait for Postgres
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: Run tests
-          command: yarn test
-      - run:
-          name: Saving the coveralls
-          command: |
-            yarn test:coverage
-      # - run:
-      #     name: coverage
-      #     command: |
-      #       npx nyc report --reporter=text-lcov | npx coveralls
-      #   environment:
-      #     COVERALLS_REPO_TOKEN: $COVERALLS_REPO_TOKEN
-
-
-      # - coveralls/upload
-  build:
+      - run: yarn install
+      - run: yarn build
+      - store_artifacts:
+          path: dist
+          destination: dist
+  test:
     docker:
       - image: cimg/base:stable
       - image: cimg/node:19.6.0
+      # - image: circleci/postgres
+      # - image: cimg/postgres:15.1-postgis
+      #   environment:
+      #     POSTGRES_USER: postgres
+      #     POSTGRES_DB: circle_test
+      #     POSTGRES_PASSWORD: mypassword
+      #     POSTGRES_HOST_AUTH_METHOD: trust
+          
     steps:
       - checkout
       - node/install:
           install-yarn: true
-      - run:
-          name: Install packages
-          command: |
-            yarn install
-      - run:
-          name: Build
-          command: |
-            yarn build
+      # - run: |
+      #     wget -O wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+      #     chmod +x wait-for-it.sh
+      #     ./wait-for-it.sh -t 60 localhost:5432 -- echo "PostgreSQL is up and running"
+      # - run: sudo service postgresql start
+      # - run: psql -c 'create database circle_test;' -U postgres
+      - run: yarn install
+      - run: yarn test
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+
 workflows:
   version: 2
-  test_and_build:
+  build-and-test:
     jobs:
-      - test
       - build
-      # - deploy:
-      #     requires:
-      #       - test
-      #       - build
-      #     # filters:
-      #     #   branches:
-      #     #     only: develop
-  
+      - test:
+          requires:
+            - build
