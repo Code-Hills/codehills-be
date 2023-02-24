@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import router from "./routes/index.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
