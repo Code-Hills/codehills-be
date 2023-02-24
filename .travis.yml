@@ -1,23 +1,32 @@
-env:
-  global:
-    - CC_TEST_REPORTER_ID=5a2e4619896eb6f574ab6d98089b42915bfaaccb642c17c997a71c18920343d4
 language: node_js
+
 node_js:
-  - 'stable'
-before_install:
-  - npm install sequelize-cli -g
-install:
-  - npm install
+  - "stable"
+
 services:
   - postgresql
+
 before_script:
-  - npm add sequelize-cli
-  - psql -c 'CREATE DATABASE codehilldb;' -U postgres
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-script: npm test
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - psql -c 'create database travis_ci_test;' -U postgres
+
+env:
+  global:
+    - PGDATABASE=travis_ci_test
+    - PGUSER=postgres
+    - PGPORT=5432
+
+script:
+  - npm run test:coverage
+
+after_success:
+  - npm run coverage
+
+addons:
+  postgresql: "9.6"
+  
+cache:
+  directories:
+    - "node_modules"
+
 notifications:
   email: false
