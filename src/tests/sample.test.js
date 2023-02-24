@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { welcomeController } from "../controllers/index.js";
+import { welcomeController } from "../controllers/index";
 
 chai.use(chaiHttp);
 chai.should();

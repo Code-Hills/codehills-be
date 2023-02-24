@@ -1,11 +1,7 @@
 import { Router } from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerDoc from "../documentation/swagger";
-import {
-  addUser,
-  getAllUsers,
-  welcomeController,
-} from "../controllers/index.js";
+import { addUser, getAllUsers, welcomeController } from "../controllers/index";
 
 const router = Router();
 

@@ -1,4 +1,5 @@
-import dotenv from 'dotenv';
+/* eslint-disable no-undef */
+import dotenv from "dotenv";
 dotenv.config();
 const {
   PRODUCTION_DATABASE,
@@ -16,7 +17,7 @@ const {
 } = process.env;
 
 const dialectToggle = () => {
-  return TEST_GIT_ACTIONS == 'true'
+  return TEST_GIT_ACTIONS == "true"
     ? {
         ssl: {
           require: true,
@@ -33,7 +34,7 @@ module.exports = {
     database: DEV_DATABASE,
     host: DATABASE_HOST,
     port: DATABASE_PORT,
-    dialect: 'postgres',
+    dialect: "postgres",
   },
   test: {
     username: TEST_DATABASE_USER,
@@ -41,9 +42,9 @@ module.exports = {
     database: TEST_DATABASE,
     host: TEST_DATABASE_HOST,
     port: TEST_DATABASE_PORT,
-    dialect: 'postgres',
+    dialect: "postgres",
     logging: false,
-    protocol: 'postgres',
+    protocol: "postgres",
     dialectOptions: dialectToggle(),
   },
   production: {
@@ -52,6 +53,6 @@ module.exports = {
     database: PRODUCTION_DATABASE,
     host: DATABASE_HOST,
     port: DATABASE_PORT,
-    dialect: 'postgres',
+    dialect: "postgres",
   },
 };
