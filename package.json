@@ -9,12 +9,17 @@
     "lint:fix": "eslint . --fix",
     "build": "babel src --out-dir dist --source-maps inline --copy-files",
     "start": "babel-node  dist/app.js",
-    "test": "mocha --require @babel/register 'src/tests/**/*.test.js'",
+    "test": "cross-env NODE_ENV=test npm run db:reset && cross-env NODE_ENV=test mocha --require @babel/register --exit 'src/tests/**/*.test.js'",
     "test:coverage": "nyc mocha --coverage --recursive --require @babel/polyfill --require @babel/register */tests/*.js --timeout 500000000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "migrate": "npx sequelize-cli db:migrate",
-    "down": "npx sequelize-cli db:migrate:undo",
-    "seed": "npx sequelize-cli db:seed:all",
+    "db:migrate": "sequelize db:migrate",
+    "db:seed": "sequelize db:seed:all",
+    "db:unseed": "sequelize db:seed:undo:all",
+    "db:migrate:undo": "sequelize db:migrate:undo:all",
+    "db:reset": "npm run db:migrate:undo && npm run db:migrate && npm run db:seed",
+    "db:hard:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed",
+    "db:create": "sequelize db:create",
+    "db:drop": "sequelize db:drop",
     "prepare": "husky install"
   },
   "repository": {
@@ -29,7 +34,6 @@
   "homepage": "https://github.com/denislohan/codehills-be#readme",
   "dependencies": {
     "@babel/cli": "^7.20.7",
-    "body-parser": "^1.20.1",
     "coveralls": "^3.1.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -50,10 +54,10 @@
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.0",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.4",
-    "sequelize-cli": "^5.5.1",
-    "husky": "^8.0.0"
+    "sequelize-cli": "^5.5.1"
   }
 }

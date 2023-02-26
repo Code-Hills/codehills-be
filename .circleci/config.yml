@@ -40,6 +40,7 @@ jobs:
       # - run: sudo service postgresql start
       # - run: psql -c 'create database circle_test;' -U postgres
       - run: yarn install
+      - run: yarn upgrade
       - run: yarn test
       - run: yarn add coveralls
       - run: yarn test:coverage
@@ -56,6 +57,8 @@ jobs:
       - store_artifacts:
           path: coverage
           destination: coverage
+      - run:
+          command: sudo npm update
       - run: 
           command: sudo npm install coveralls
       - coveralls/upload
