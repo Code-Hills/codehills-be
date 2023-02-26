@@ -24,7 +24,7 @@ jobs:
           node-version: '19.x'
 
       - name: Start PostgreSQL container
-        uses: docker/compose-action@1.1.1
+        uses: docker/compose@v2
         with:
           compose-file: docker-compose.yml
           project-name: postgres
