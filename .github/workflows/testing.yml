@@ -23,20 +23,18 @@ jobs:
         with:
           node-version: '19.x'
 
-      - name: Start PostgreSQL container
-        uses: docker/compose@v2
-        with:
-          compose-file: docker-compose.yml
-          project-name: postgres
-          service-ports: 5432:5432
+      # - name: Start PostgreSQL container
+      #   uses: docker/compose@v2
+      #   with:
+      #     compose-file: docker-compose.yml
+      #     project-name: postgres
+      #     service-ports: 5432:5432
+      - uses: actions/checkout@v2
+      - name: Build the stack
+        run: docker-compose up -d
 
-      - name: Wait for PostgreSQL to start
-        uses: steveltn/https-request-action@v1
-        id: wait-for-pg
-        with:
-          url: http://localhost:5432/
-          retry: 30
-          retry-delay: 5
+      - name: Wait for 1 minutes
+        run: sleep 60
 
       - name: Install dependencies
         run: npm install
