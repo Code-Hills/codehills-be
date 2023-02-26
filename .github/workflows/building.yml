@@ -32,3 +32,44 @@ jobs:
         run: yarn install
       - name: Build
         run: yarn build
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '19.x'
+
+      - name: Start PostgreSQL container
+        uses: docker/compose-action@1.1.1
+        with:
+          compose-file: docker-compose.yml
+          project-name: postgres
+          service-ports: 5432:5432
+
+      - name: Wait for PostgreSQL to start
+        uses: steveltn/https-request-action@v1
+        id: wait-for-pg
+        with:
+          url: http://localhost:5432/
+          retry: 30
+          retry-delay: 5
+
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests and generate coverage report
+        env:
+          DATABASE_URL: postgresql://postgres:password@localhost:5432/mydatabase
+          TEST_DATABASE_URL: postgres://postgres:password@localhost:5432/mydatabase
+          CI: true
+          NODE_ENV: test
+        run: npm run test:coverage
+          
+      - name: Upload coverage report to Coveralls
+        uses: coverallsapp/github-action@v2.2.0
+        with:
+          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          path-to-lcov: ./coverage/lcov.info
