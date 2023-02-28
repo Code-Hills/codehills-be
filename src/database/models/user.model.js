@@ -21,6 +21,10 @@ const UserModel = () => {
         type: DataTypes.STRING,
         defaultValue: "user",
       },
+      isLoggedIn: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       tableName: "tbl_users",

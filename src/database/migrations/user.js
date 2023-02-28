@@ -33,6 +33,10 @@ module.exports = {
         type: Sequelize.STRING,
         default: "user",
       },
+      isLoggedIn: {
+        type: Sequelize.BOOLEAN,
+        default: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

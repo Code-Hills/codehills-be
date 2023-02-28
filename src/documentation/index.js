@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import swaggerDoc from "./swagger.json";
 import user from "./users";
-import auth from './auth';
+import auth from "./auth";
 
 const defaults = swaggerDoc.paths;
 
@@ -14,8 +14,8 @@ const host =
 
 const paths = {
   ...defaults,
-  ...user,
   ...auth,
+  ...user,
 };
 
 const config = {
