@@ -11,7 +11,6 @@ export default class UserControllers {
         data: user,
       });
     } catch (error) {
-      console.error(error);
       return Response.error(res, 500, {
         message: "Error adding user",
         error: error.message,
@@ -24,7 +23,6 @@ export default class UserControllers {
       const users = await User.findAll();
       res.json(users);
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Server error" });
     }
   }
