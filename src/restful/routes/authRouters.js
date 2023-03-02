@@ -46,4 +46,6 @@ router.get(
   loginCallback
 );
 
+router.post("/login", AuthController.login);
+
 module.exports = { router, passport };
