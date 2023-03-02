@@ -1,18 +1,38 @@
 /* eslint-disable no-undef */
-import bodyParser from "body-parser";
 import express from "express";
-import router from "./routes/index";
 import dotenv from "dotenv";
-
+import DB from "./database";
+import router from "./restful/routes/index";
+import { associate } from "./database/relationships";
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 
 const app = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(router);
 
-app.use(bodyParser.json());
-app.use("/api", router);
+const initializeDatabase = async () => {
+  await DB.sequelize.sync({
+    force: false,
+    alter: process.env.NODE_ENV !== "production",
+  });
+  associate();
+};
 
-app.listen(PORT, () => {
-  console.log(`The app is listening on port ${PORT}`);
-});
+const start = () => {
+  try {
+    initializeDatabase();
+    app.listen({ port: PORT }, () =>
+      process.stdout.write(`http://localhost:${PORT} \n`)
+    );
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
+};
+
+start();
+
+export default app;

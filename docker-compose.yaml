@@ -1,0 +1,38 @@
+# version: '3'
+
+# services:
+#   prenchpress_bn:
+#     build:
+#       context: .
+#     expose:
+#       - ${PORT}
+#     ports:
+#       - '${PORT}:${PORT}'
+#     restart: always
+#     environment:
+#       HOST: ${HOST}
+#       NODE_ENV: ${NODE_ENV}
+#       PORT: ${PORT}
+#       API_VERSION: ${API_VERSION}
+#       WEB_APP_URL: ${WEB_APP_URL}
+#       EMAIL_JWT_SECRET: ${EMAIL_JWT_SECRET}
+#       JWT_SECRET: ${JWT_SECRET}
+#       EXPIRES_IN: ${EXPIRES_IN}
+#       DB_USER: ${DB_USER}
+#       DATABASE_URL: ${DATABASE_URL}
+#     command: npm start
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PGUSER: postgres
+      
+    ports:
+      - '5432:5432'

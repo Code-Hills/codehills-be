@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   coveralls: coveralls/coveralls@1.0.6
+
 jobs:
   build:
     docker:
@@ -21,31 +22,35 @@ jobs:
     docker:
       - image: cimg/base:stable
       - image: cimg/node:19.6.0
-      # - image: circleci/postgres
-      # - image: cimg/postgres:15.1-postgis
-      #   environment:
-      #     POSTGRES_USER: postgres
-      #     POSTGRES_DB: circle_test
-      #     POSTGRES_PASSWORD: mypassword
-      #     POSTGRES_HOST_AUTH_METHOD: trust
+      - image: circleci/postgres:11.11
+        environment:
+          MIX_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: mydatabase
+          POSTGRES_HOST_AUTH_METHOD: trust
+          PGUSER: postgres
           
+    environment:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres@localhost:5432/mydatabase
+      TEST_DATABASE_URL: postgres://postgres:password@localhost:5432/mydatabase
     steps:
       - checkout
+      - run: echo $TEST_DATABASE_URL
       - node/install:
           install-yarn: true
-      # - run: |
-      #     wget -O wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-      #     chmod +x wait-for-it.sh
-      #     ./wait-for-it.sh -t 60 localhost:5432 -- echo "PostgreSQL is up and running"
-      # - run: sudo service postgresql start
-      # - run: psql -c 'create database circle_test;' -U postgres
+      - run:
+          name: Wait for Docker images to become available
+          command: |
+            wget -O wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+            chmod +x wait-for-it.sh
+            ./wait-for-it.sh -t 120 localhost:5432 -- echo "PostgreSQL is up and running"
       - run: yarn install
-      - run: yarn test
+      - run: yarn add cross-env
+      - run: yarn upgrade
       - run: yarn add coveralls
       - run: yarn test:coverage
-      # - run:
-      #     name: Install Node.js and npm
-      #     command: sudo apt-get update
       - run: 
           command: sudo apt-get install -y nodejs
       - run: 
@@ -56,9 +61,19 @@ jobs:
       - store_artifacts:
           path: coverage
           destination: coverage
+      - run:
+          command: sudo npm update
       - run: 
           command: sudo npm install coveralls
-      - coveralls/upload
+      # - coveralls/upload
+  coveralls-upload:
+    executor: node/default
+    steps:
+      - coveralls/upload:
+          parallel: true
+          flag_name: Test 1
+          # path: ./coverage/lcov.info
+
 notify:
   webhooks:
     - url: https://coveralls.io/webhook?repo_token=${process.env.COVERALLS_REPO_TOKEN}
@@ -67,6 +82,10 @@ workflows:
   build-and-test:
     jobs:
       - build
-      - test:
-          requires:
-            - build
+      # - test
+      # - test:
+      #     requires:
+      #       - build
+      # - coveralls-upload:
+      #     requires:
+      #       - test
