@@ -8,7 +8,7 @@ module.exports = {
   },
   test: {
     use_env_variable: "TEST_DATABASE_URL",
-    dialect: "postgres",
+    // dialect: "postgres",
     dialectOptions: {
       ssl: process.env.NODE_ENV === "production", // set this value based on your environment
     },

@@ -4,9 +4,8 @@ Is Web Application platform which is going to help company staff like managers  
 
 
 ## Badges
-[![Coverage Status](https://coveralls.io/repos/github/Code-Hills/codehills-be/badge.svg?branch=main)](https://coveralls.io/github/Code-Hills/codehills-be?branch=main)
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Code-Hills/codehills-be/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Code-Hills/codehills-be/tree/main)
-
+[![Coverage Status](https://coveralls.io/repos/github/Code-Hills/codehills-be/badge.svg?branch=database_fix)](https://coveralls.io/github/Code-Hills/codehills-be?branch=database_fix)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Code-Hills/codehills-be/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Code-Hills/codehills-be/tree/develop)
 
 ## Demonstration
 

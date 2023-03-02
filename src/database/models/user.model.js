@@ -14,11 +14,16 @@ const UserModel = () => {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: DataTypes.STRING,
-      country: DataTypes.STRING,
+      displayName: DataTypes.STRING,
       avatar: DataTypes.STRING,
+      microsoftId: DataTypes.UUID,
       role: {
         type: DataTypes.STRING,
         defaultValue: "user",
+      },
+      isLoggedIn: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
     },
     {

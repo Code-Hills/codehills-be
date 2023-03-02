@@ -44,20 +44,12 @@ jobs:
         run: npm install
       # - name: Run tests and generate coverage report
       #   env:
-      #     NODE_ENV: test
+      #     DATABASE_URL: postgresql://postgres:password@localhost:5432/mydatabase
+      #     TEST_DATABASE_URL: postgres://postgres:password@localhost:5432/mydatabase
       #     CI: true
-      #     TEST_DATABASE_URL: postgres://thunder_user:58hAIQS77klG6uZf58NceFDV57btJN1J@dpg-ce2cksg2i3mkuc8r036g-a.oregon-postgres.render.com/thunder?sslmode=verify-ca
-
-      #   run: | 
-      #     env  TEST_DATABASE_URL: "postgres://thunder_user:58hAIQS77klG6uZf58NceFDV57btJN1J@dpg-ce2cksg2i3mkuc8r036g-a.oregon-postgres.render.com/thunder?sslmode=verify-ca" 
-      #     yarn test:coverage
-
-          
-      # - name: Upload coverage report to Coveralls
-      #   # uses: coverallsapp/github-action@v2.2.0
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      #     NODE_ENV: test
+      #   run: npm run test:coverage
       #     path-to-lcov: ./coverage/lcov.info
       # - name: Coveralls Finished
       #   run: env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn coverage --if-present
+

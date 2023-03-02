@@ -1,16 +1,28 @@
 /* eslint-disable no-undef */
 import express from "express";
+import session from "express-session";
 import dotenv from "dotenv";
 import DB from "./database";
 import router from "./restful/routes/index";
 import { associate } from "./database/relationships";
+import { passport } from "./restful/routes/authRouters";
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 
 const app = express();
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_KEY || "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(router);
 
 const initializeDatabase = async () => {

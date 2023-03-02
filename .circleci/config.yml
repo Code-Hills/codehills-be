@@ -69,6 +69,8 @@ jobs:
   coveralls-upload:
     executor: node/default
     steps:
+      - run: 
+          command: sudo npm install coveralls
       - coveralls/upload:
           parallel: true
           flag_name: Test 1

@@ -8,6 +8,9 @@ module.exports = {
         type: Sequelize.UUID,
         default: Sequelize.UUIDV4,
       },
+      microsoftId: {
+        type: Sequelize.UUID,
+      },
       firstName: {
         type: Sequelize.STRING,
       },
@@ -17,7 +20,7 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
       },
-      country: {
+      displayName: {
         type: Sequelize.STRING,
       },
       telephone: {
@@ -29,6 +32,10 @@ module.exports = {
       role: {
         type: Sequelize.STRING,
         default: "user",
+      },
+      isLoggedIn: {
+        type: Sequelize.BOOLEAN,
+        default: true,
       },
       createdAt: {
         allowNull: false,
