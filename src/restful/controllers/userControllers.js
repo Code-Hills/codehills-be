@@ -30,14 +30,16 @@ export default class UserControllers {
 
   static async assignRoles(req, res) {
     try {
-      const admin = await User.findByPk(req.userId);
-
+      const admin = req.user;
+      console.log("RRRRREEEEEEEEQQQ", admin);
       if (admin && admin.role === "admin") {
         const { email, role } = req.body;
         const userExist = await UserService.findOneUser({ email });
 
         if (!userExist) {
-          return res.status(404).json({ message: "User not found" });
+          return res.status(404).json({
+            message: "The user you are trying to update was not found!",
+          });
         }
 
         if (userExist.role === "admin") {

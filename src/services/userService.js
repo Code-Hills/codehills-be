@@ -92,6 +92,15 @@ class UserService {
       throw error;
     }
   }
+
+  static async findUserById(id) {
+    try {
+      const user = await User.findByPk(id);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default UserService;
