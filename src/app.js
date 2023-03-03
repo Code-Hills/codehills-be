@@ -27,8 +27,8 @@ app.use(router);
 
 const initializeDatabase = async () => {
   await DB.sequelize.sync({
-    force: false,
-    // alter: process.env.NODE_ENV !== "production",
+    force: true,
+    alter: process.env.NODE_ENV !== "production",
   });
   associate();
 };

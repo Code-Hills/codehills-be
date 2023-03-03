@@ -31,7 +31,6 @@ export default class UserControllers {
   static async assignRoles(req, res) {
     try {
       const admin = req.user;
-      console.log("RRRRREEEEEEEEQQQ", admin);
       if (admin && admin.role === "admin") {
         const { email, role } = req.body;
         const userExist = await UserService.findOneUser({ email });
