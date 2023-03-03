@@ -78,11 +78,12 @@ class AuthController {
     try {
       const email = req.body.email;
       const userExist = await UserService.findOneUser({ email });
-
       if (!userExist) {
         return res.status(404).json({ message: "user not found!" });
       }
 
+      userExist.isLoggedIn = true;
+      await UserService.updateUser({ isLoggedIn: true }, { email: email });
       const token = jwt.sign(userExist?.toJSON(), JWT_SECRET, {
         expiresIn: EXPIRES_IN,
       });

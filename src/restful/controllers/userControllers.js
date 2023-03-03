@@ -46,6 +46,11 @@ export default class UserControllers {
             .status(403)
             .json({ message: "Admin can not be assigned another role" });
         }
+
+        const validRoles = ["developer", "manager", "architect", "admin"];
+        if (!validRoles.includes(role)) {
+          return res.status(400).json({ message: "Invalid role" });
+        }
         await User.update(
           { role: role },
           {
