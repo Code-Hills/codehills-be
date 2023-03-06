@@ -30,8 +30,8 @@ module.exports = {
         type: Sequelize.STRING,
       },
       role: {
-        type: Sequelize.STRING,
-        default: "user",
+        type: Sequelize.ENUM("developer", "manager", "architect", "admin"),
+        default: "developer",
       },
       isLoggedIn: {
         type: Sequelize.BOOLEAN,
