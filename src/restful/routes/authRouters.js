@@ -2,6 +2,7 @@ import express from "express";
 import passport from "passport";
 import { Strategy as MicrosoftStrategy } from "passport-microsoft";
 import AuthController from "../controllers/authControllers";
+import protect from "../middlewares";
 
 const router = express.Router();
 const { loginCallback } = AuthController;
@@ -47,5 +48,6 @@ router.get(
 );
 
 router.post("/login", AuthController.login);
+router.post("/logout", protect, AuthController.logout);
 
 module.exports = { router, passport };
