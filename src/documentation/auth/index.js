@@ -31,6 +31,16 @@ const auth = {
       responses,
     },
   },
+  "/auth/logout": {
+    post: {
+      tags: ["AUTH"],
+      security: [{ JWT: [] }],
+      summary: "Log out",
+      parameters: [],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
 };
 
 export default auth;

@@ -96,6 +96,19 @@ class AuthController {
         .json({ message: "Server error", error: error.message });
     }
   }
+
+  static async logout(req, res) {
+    try {
+      const { email } = req.user;
+      await UserService.updateUser({ isLoggedIn: false }, { email: email });
+      return res.status(200).json({ message: "user logged out" });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ message: "Server error", error: error.message });
+    }
+  }
 }
 
 export default AuthController;
