@@ -41,6 +41,95 @@ const auth = {
       responses,
     },
   },
+  "/profile": {
+    get: {
+      tags: ["AUTH"],
+      security: [{ JWT: [] }],
+      summary: "get user profile",
+      parameters: [],
+      consumes: ["application/json"],
+      responses,
+    },
+
+    put: {
+      tags: ["AUTH"],
+      security: [{ JWT: [] }],
+      summary: "update user profile",
+      parameters: [
+        {
+          in: "formData",
+          name: "firstName",
+          type: "string",
+          schema: {
+            example: "Bull",
+          },
+        },
+        {
+          in: "formData",
+          name: "lastName",
+          type: "string",
+          schema: {
+            example: "Dog",
+          },
+        },
+        {
+          in: "formData",
+          name: "displayName",
+          type: "string",
+          schema: {
+            example: "thunderZeye",
+          },
+        },
+        {
+          in: "formData",
+          name: "avatar",
+          type: "file",
+        },
+        {
+          in: "formData",
+          name: "address",
+          type: "object",
+          schema: {
+            example: {
+              country: "Rwanda",
+              city: "kigali",
+              street: "KK4Ave",
+            },
+          },
+        },
+        {
+          in: "formData",
+          name: "bank",
+          type: "object",
+          schema: {
+            example: {
+              accountName: "Saving",
+              BankName: "BK Rwanda",
+              SwiftCode: "009",
+              Currency: "Rwf",
+            },
+          },
+        },
+        {
+          in: "formData",
+          name: "currentProject",
+          schema: {
+            example: "939f62a9-5077-4600-ad51-21a15d8eeed3",
+          },
+        },
+        {
+          in: "formData",
+          name: "gender",
+          type: "string",
+          schema: {
+            example: "Male",
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
 };
 
 export default auth;

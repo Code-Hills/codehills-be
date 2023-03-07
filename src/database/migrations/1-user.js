@@ -41,6 +41,15 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         default: true,
       },
+      address: Sequelize.JSONB(),
+      bank: Sequelize.JSONB({
+        accountName: Sequelize.STRING,
+        BankName: Sequelize.STRING,
+        SwiftCode: Sequelize.NUMBER,
+        Currency: Sequelize.STRING,
+      }),
+      currentProject: Sequelize.UUID,
+      gender: Sequelize.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

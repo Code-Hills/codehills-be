@@ -2,6 +2,8 @@ import { Router } from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerDoc from "./../../documentation";
 import userRoutes from "./userRoutes";
+import profileRouter from "./profile";
+import uploadRoute from "./_upload";
 import { router as authRouter } from "./authRouters";
 import projectRouter from "./projectRoutes";
 
@@ -13,6 +15,8 @@ router.use(`${url}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 router.use(`${url}/users`, userRoutes);
 router.use(`${url}/auth`, authRouter);
 router.use(`${url}/projects`, projectRouter);
+router.use(`${url}/profile`, profileRouter);
+router.use("/uploads", uploadRoute);
 
 router.all(`${url}/`, (req, res) => {
   return res.status(200).json({ message: "Welcome to codehills backend!" });

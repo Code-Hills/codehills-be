@@ -17,6 +17,15 @@ const UserModel = () => {
       displayName: DataTypes.STRING,
       avatar: DataTypes.STRING,
       microsoftId: DataTypes.UUID,
+      address: DataTypes.JSONB(),
+      bank: DataTypes.JSONB({
+        accountName: DataTypes.STRING,
+        BankName: DataTypes.STRING,
+        SwiftCode: DataTypes.NUMBER,
+        Currency: DataTypes.STRING,
+      }),
+      currentProject: DataTypes.UUID,
+      gender: DataTypes.STRING,
       role: {
         type: DataTypes.ENUM("developer", "manager", "architect", "admin"),
         defaultValue: "developer",

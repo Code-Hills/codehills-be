@@ -1,0 +1,17 @@
+name: Pull Request Template
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  pull-request-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add pull request template
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: 'Pull Request Template'
+          commit-message: 'Add pull request template'
+          branch: pull-request-template
+          base: develop
+          path: .github/PULL_REQUEST_TEMPLATE.md
