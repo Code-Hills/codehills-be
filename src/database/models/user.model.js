@@ -18,8 +18,8 @@ const UserModel = () => {
       avatar: DataTypes.STRING,
       microsoftId: DataTypes.UUID,
       role: {
-        type: DataTypes.STRING,
-        defaultValue: "user",
+        type: DataTypes.ENUM("developer", "manager", "architect", "admin"),
+        default: "developer",
       },
       isLoggedIn: {
         type: DataTypes.BOOLEAN,

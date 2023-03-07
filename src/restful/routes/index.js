@@ -8,7 +8,7 @@ const API_VERSION = process.env.API_VERSION || "v1";
 const url = `/api/${API_VERSION}`;
 const router = Router();
 
-router.use(`/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+router.use(`${url}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 router.use(`${url}/users`, userRoutes);
 router.use(`${url}/auth`, authRouter);
 

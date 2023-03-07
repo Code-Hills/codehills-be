@@ -2,6 +2,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import userService from "./../../services/userService";
+import UserService from "./../../services/userService";
 
 dotenv.config();
 const { JWT_SECRET, FRONTEND_URL, EXPIRES_IN } = process.env;
@@ -19,6 +20,7 @@ class AuthController {
    */
   static async loginCallback(req, res) {
     try {
+      req.user.role = "developer";
       const user = await userService.findOrCreateUser(req.user);
 
       const createdUser = user.toJSON();
@@ -69,6 +71,29 @@ class AuthController {
       return res.redirect(
         `${FRONTEND_URL}/login?code=${responseBuffer.toString("base64")}`
       );
+    }
+  }
+
+  static async login(req, res) {
+    try {
+      const email = req.body.email;
+      const userExist = await UserService.findOneUser({ email });
+      if (!userExist) {
+        return res.status(404).json({ message: "user not found!" });
+      }
+
+      userExist.isLoggedIn = true;
+      await UserService.updateUser({ isLoggedIn: true }, { email: email });
+      const token = jwt.sign(userExist?.toJSON(), JWT_SECRET, {
+        expiresIn: EXPIRES_IN,
+      });
+
+      return res.status(200).json({ message: "user logged in", token: token });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ message: "Server error", error: error.message });
     }
   }
 }
