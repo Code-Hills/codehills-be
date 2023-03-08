@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { Model, DataTypes, Sequelize } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/sequelize";
-export class User extends Model {}
 
+// import DB from "..";
+// const { Project, UserProject } = DB;
+
+class User extends Model {}
 const UserModel = () => {
   User.init(
     {
@@ -19,7 +22,7 @@ const UserModel = () => {
       microsoftId: DataTypes.UUID,
       role: {
         type: DataTypes.ENUM("developer", "manager", "architect", "admin"),
-        default: "developer",
+        defaultValue: "developer",
       },
       isActivated: {
         type: DataTypes.BOOLEAN,
@@ -31,11 +34,13 @@ const UserModel = () => {
       },
     },
     {
+      sequelize,
+      modelName: "User",
       tableName: "tbl_users",
       timestamps: true,
-      sequelize, // passing the `sequelize` instance is required
     }
   );
+
   return User;
 };
 
