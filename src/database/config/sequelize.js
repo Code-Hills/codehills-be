@@ -4,7 +4,6 @@ dotenv.config();
 
 const { NODE_ENV, DATABASE_URL, DEV_DATABASE_URL, TEST_DATABASE_URL } =
   process.env;
-
 let url =
   NODE_ENV == "development"
     ? DEV_DATABASE_URL

@@ -111,7 +111,7 @@ class AuthController {
           message: "The user not found!",
         });
       }
-      userExist.avatar = userExist.avatar.startsWith("media-")
+      userExist.avatar = userExist?.avatar?.startsWith("media-")
         ? `${process.env.HOST}/uploads/${userExist?.avatar}`
         : userExist?.avatar;
       return Response.success(res, 200, {

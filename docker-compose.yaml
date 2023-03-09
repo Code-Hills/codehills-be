@@ -1,26 +1,27 @@
 version: '3'
-
 services:
   db:
     image: postgres
-    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydatabase
+      POSTGRES_DB: mydb
       POSTGRES_HOST_AUTH_METHOD: trust
-      PGUSER: postgres
-      
-    ports:
-      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
   app:
     build:
       context: .
+      dockerfile: Dockerfile
     expose:
       - ${PORT}
     ports:
       - '${PORT}:${PORT}'
     restart: always
+    depends_on:
+      - db
+    # env_file:
+    #   - .env
     environment:
       HOST: ${HOST}
       NODE_ENV: ${NODE_ENV}
@@ -30,10 +31,11 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       EXPIRES_IN: ${EXPIRES_IN}
       SESSION_KEY: ${SESSION_KEY}
-      DEV_DATABASE_URL: ${DEV_DATABASE_URL}
-      TEST_DATABASE_URL: ${TEST_DATABASE_URL}
-      DATABASE_URL: ${DATABASE_URL}
       CLIENTID: ${CLIENTID}
       CLIENTSECRET: ${CLIENTSECRET}
-
+      DATABASE_URL: postgres://postgres:password@db/mydb
+      DEV_DATABASE_URL: postgres://postgres:password@db/mydb
+      TEST_DATABASE_URL: postgres://postgres:password@db/mydb
     command: npm start
+volumes:
+  db-data:
