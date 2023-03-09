@@ -15,7 +15,12 @@ const protect = async (req, res, next) => {
         return res
           .status(401)
           .json({ message: "Not Authorized, Not logged in" });
-      // Set the user id in the req
+
+      if (!user.isActivated)
+        return res
+          .status(401)
+          .json({ message: "Not Authorized,User Account Is Not activated" });
+
       req.user = user;
       next();
     } catch (error) {

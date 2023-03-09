@@ -33,6 +33,10 @@ module.exports = {
         type: Sequelize.ENUM("developer", "manager", "architect", "admin"),
         default: "developer",
       },
+      isActivated: {
+        type: Sequelize.BOOLEAN,
+        default: true,
+      },
       isLoggedIn: {
         type: Sequelize.BOOLEAN,
         default: true,

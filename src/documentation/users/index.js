@@ -57,6 +57,48 @@ const users = {
       responses,
     },
   },
+  "/users/activate": {
+    put: {
+      tags: ["Admin"],
+      security: [{ JWT: [] }],
+      summary: "Activate user",
+      parameters: [
+        {
+          in: "body",
+          name: "email",
+          required: true,
+          schema: {
+            example: {
+              email: "email@example.com",
+            },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+  "/users/deactivate": {
+    put: {
+      tags: ["Admin"],
+      security: [{ JWT: [] }],
+      summary: "Deactivate user",
+      parameters: [
+        {
+          in: "body",
+          name: "email",
+          required: true,
+          schema: {
+            example: {
+              email: "email@example.com",
+            },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
 };
 
 export default users;
