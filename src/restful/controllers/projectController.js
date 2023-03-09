@@ -1,14 +1,3 @@
-// // Create a project
-// const project = await Project.create({ name: "Project 1" });
-
-// import UserService from "../../services/userService";
-
-// // Get a user by their ID
-// const user = await User.findByPk(1);
-
-// // Add the user to the project
-// await project.addUser(user);
-
 import db from "../../database";
 const { Project, User, UserProject } = db;
 
@@ -16,12 +5,8 @@ export default class projectController {
   static async createProject(req, res) {
     try {
       const { name, description, startDate, endDate } = req.body;
-      const project = await Project.create({
-        name,
-        description,
-        startDate,
-        endDate,
-      });
+      const newProject = { name, description, startDate, endDate };
+      const project = await Project.create(newProject);
       return res.status(201).json(project);
     } catch (error) {
       console.error(error);
@@ -120,35 +105,6 @@ export default class projectController {
     }
   }
 
-  // static async getProjectUsers(req, res) {
-  //   try {
-  //     const { projectId } = req.params;
-
-  //     // Check if project exist
-  //     const project = await Project.findByPk(projectId);
-  //     if (!project) {
-  //       return res.status(404).json({ error: "Project not found" });
-  //     }
-
-  //     // Get all users assigned to project
-  //     const users = await User.findAll({
-  //       include: [
-  //         {
-  //           model: Project,
-  //           as: "projects",
-  //           where: { projectId: projectId },
-  //           attributes: [],
-  //         },
-  //       ],
-  //     });
-
-  //     return res.status(200).json({ users });
-  //   } catch (error) {
-  //     console.error(error);
-  //     return res.status(500).json({ error: "Server error" });
-  //   }
-  // }
-
   static async getProjectUsers(req, res) {
     try {
       const { projectId } = req.params;
@@ -173,64 +129,4 @@ export default class projectController {
       res.status(500).json({ message: "Server error" });
     }
   }
-
-  // static async getProjectManagers(req, res) {
-  //   try {
-  //     const { projectId } = req.params;
-
-  //     // Check if project exist
-  //     const project = await Project.findByPk(projectId);
-  //     if (!project) {
-  //       return res.status(404).json({ error: "Project not found" });
-  //     }
-
-  //     // Get all users assigned to project
-  //     const users = await User.findAll({
-  //       include: [
-  //         {
-  //           model: Project,
-  //           as: "projects",
-  //           where: { id: projectId },
-  //           attributes: [],
-  //         },
-  //       ],
-  //       where: { role: "manager" },
-  //     });
-
-  //     return res.status(200).json({ users });
-  //   } catch (error) {
-  //     console.error(error);
-  //     return res.status(500).json({ error: "Server error" });
-  //   }
-  // }
-
-  // static async getProjectDevelopers(req, res) {
-  //   try {
-  //     const { projectId } = req.params;
-
-  //     // Check if project exist
-  //     const project = await Project.findByPk(projectId);
-  //     if (!project) {
-  //       return res.status(404).json({ error: "Project not found" });
-  //     }
-
-  //     // Get all users assigned to project
-  //     const users = await User.findAll({
-  //       include: [
-  //         {
-  //           model: Project,
-  //           as: "projects",
-  //           where: { id: projectId },
-  //           attributes: [],
-  //         },
-  //       ],
-  //       where: { role: "developer" },
-  //     });
-
-  //     return res.status(200).json({ users });
-  //   } catch (error) {
-  //     console.error(error);
-  //     return res.status(500).json({ error: "Server error" });
-  //   }
-  // }
 }
