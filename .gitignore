@@ -4,3 +4,4 @@ dist
 .nyc_output
 yarn-error.log
 yarn.lock
+assets

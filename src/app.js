@@ -4,6 +4,7 @@ import session from "express-session";
 import dotenv from "dotenv";
 import DB from "./database";
 import router from "./restful/routes/index";
+import fileUploader from "express-fileupload";
 import { associate } from "./database/relationships";
 import { passport } from "./restful/routes/authRouters";
 dotenv.config();
@@ -23,6 +24,13 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(
+  fileUploader({
+    fileSize: 50 * 1024 * 1024,
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 app.use(router);
 
 const initializeDatabase = async () => {

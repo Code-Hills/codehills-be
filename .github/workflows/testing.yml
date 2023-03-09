@@ -20,6 +20,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      -  uses: actions/checkout@v2
+      - name: Build the stack
+        env:
+          NODE_ENV: test
+          PORT: 3400
+        run: docker-compose -f docker-compose.yaml up -d db
+      -  name: Check folder
+         run: pwd
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup Node.js
@@ -27,29 +35,91 @@ jobs:
         with:
           node-version: '19.x'
 
-      # - name: Start PostgreSQL container
-      #   uses: docker/compose@v2
-      #   with:
-      #     compose-file: docker-compose.yml
-      #     project-name: postgres
-      #     service-ports: 5432:5432
-      - uses: actions/checkout@v2
-      - name: Build the stack
-        run: docker-compose up -d
-
-      - name: Wait for 1 minutes
-        run: sleep 60
+      # - name: Wait for 1 minutes
+      #   run: sleep 60
 
       - name: Install dependencies
         run: npm install
-      # - name: Run tests and generate coverage report
+
+      # - name: Run tests and coverage
       #   env:
-      #     DATABASE_URL: postgresql://postgres:password@localhost:5432/mydatabase
-      #     TEST_DATABASE_URL: postgres://postgres:password@localhost:5432/mydatabase
+      #     DATABASE_URL: postgres://admin:ptvcNsayeHQO01PXqqQRU754zzPM65BQ@dpg-cfnki6ta499f28c8pvd0-a.oregon-postgres.render.com/codehills_test
+      #     DEV_DATABASE_URL: postgres://admin:ptvcNsayeHQO01PXqqQRU754zzPM65BQ@dpg-cfnki6ta499f28c8pvd0-a.oregon-postgres.render.com/codehills_test
+      #     TEST_DATABASE_URL: postgres://admin:ptvcNsayeHQO01PXqqQRU754zzPM65BQ@dpg-cfnki6ta499f28c8pvd0-a.oregon-postgres.render.com/codehills_test
       #     CI: true
-      #     NODE_ENV: test
-      #   run: npm run test:coverage
+      #     NODE_ENV: production
+      #   run:  npm run test:coverage && npm run coverage
+
+      # - name: Upload coverage report to Codecov
+      #   uses: codecov/codecov-action@v2
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     files: coverage.lcov
+      #     flags: unittests
       #     path-to-lcov: ./coverage/lcov.info
       # - name: Coveralls Finished
       #   run: env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn coverage --if-present
 
+# name: Test
+
+# on: [push]
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+
+#     services:
+#       db:
+#         image: postgres
+#         env:
+#           POSTGRES_USER: myuser
+#           POSTGRES_PASSWORD: mypassword
+#           POSTGRES_DB: mydatabase
+#         ports:
+#           - 5432:5432
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Install dependencies
+#         run: npm install
+        
+#       # - name: Install dependencies
+#       #   run: |
+#       #     # Create connection string URL
+#       #     connectionString="postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
+
+#       #     # Run tests using connection string URL
+#       #     npm test -- --database-url=$connectionString
+
+#       # - name: Run tests
+#       #   env:
+#       #     DATABASE_URL: postgres://myuser:mypassword@localhost:5432/mydatabase
+#       #     DEV_DATABASE_URL: postgres://postgres:example@db/mydb
+#       #     TEST_DATABASE_URL: postgres://myuser:mypassword@localhost:5432/mydatabase
+#       #   run: npm test
+#       - name: Create connection string URL
+#         id: connection-string
+#         run: echo "::set-output name=url::postgres://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.DB_HOST }}:${{ job.services.db.ports['5432'] }}/${{ env.POSTGRES_DB }}"
+
+#       - name: Test database connection
+#         env:
+#           DATABASE_URL: ${{ steps.connection-string.outputs.url }}
+#         run: |
+#           psql $DATABASE_URL -c "SELECT 1;
+
+#       - name: Test database connection
+#         env:
+#           DATABASE_URL: ${{ steps.connection-string.outputs.url }}
+#           TEST_DATABASE_URL: ${{ steps.connection-string.outputs.url }}
+#           NODE_ENV: test
+#         run: npm run db:migrate
+
+#       - name: Run tests
+#         env:
+#           DATABASE_URL: ${{ steps.connection-string.outputs.url }}
+#           DEV_DATABASE_URL: postgres://postgres:example@db/mydb
+#           TEST_DATABASE_URL: ${{ steps.connection-string.outputs.url }}
+#           NODE_ENV: test
+#         run: npm run test
