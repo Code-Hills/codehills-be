@@ -1,12 +1,31 @@
 import { Router } from "express";
+import protect from "../middlewares";
 import projectController from "../controllers/projectController";
+
+const {
+  getAllProjects,
+  createProject,
+  getProject,
+  updateProject,
+  deleteProject,
+  getProjectUsers,
+  addUserToProject,
+  removeUserFromProject,
+} = projectController;
 
 const projectRouter = Router();
 
-projectRouter.get("/", projectController.getAllProjects);
-projectRouter.post("/create", projectController.createProject);
-projectRouter.post("/users", projectController.addUserToProject);
-projectRouter.get("/:projectId/users", projectController.getProjectUsers);
-projectRouter.post("/remove-users", projectController.removeUserFromProject);
+projectRouter.get("/", protect, getAllProjects);
+projectRouter.post("/create", protect, createProject);
+projectRouter.get("/:projectId", protect, getProject);
+projectRouter.put("/:projectId/update", protect, updateProject);
+projectRouter.delete("/:projectId/delete", protect, deleteProject);
+projectRouter.get("/:projectId/users", protect, getProjectUsers);
+projectRouter.post("/:projectId/users", protect, addUserToProject);
+projectRouter.delete(
+  "/:projectId/users/:userId",
+  protect,
+  removeUserFromProject
+);
 
 export default projectRouter;

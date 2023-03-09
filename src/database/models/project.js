@@ -37,12 +37,6 @@ const ProjectModel = () => {
     }
   );
 
-  // Project.belongsToMany(User, {
-  //   through: UserProject,
-  //   // foreignKey: "projectId",
-  //   // otherKey: "userId",
-  // });
-
   return Project;
 };
 
