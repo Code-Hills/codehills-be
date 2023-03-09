@@ -21,6 +21,10 @@ const UserModel = () => {
         type: DataTypes.ENUM("developer", "manager", "architect", "admin"),
         default: "developer",
       },
+      isActivated: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       isLoggedIn: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
