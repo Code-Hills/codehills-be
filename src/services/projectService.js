@@ -2,7 +2,7 @@
 /* eslint-disable no-useless-catch */
 /* eslint-disable no-unused-vars */
 import db from "./../database";
-const { Project } = db;
+const { Project, UserProject } = db;
 
 export default class projectService {
   /**
@@ -13,8 +13,8 @@ export default class projectService {
 
   static async createProject(param) {
     try {
-      const projects = await Project.create(param);
-      return projects;
+      const project = await Project.create(param);
+      return project;
     } catch (error) {
       throw error;
     }
@@ -35,6 +35,26 @@ export default class projectService {
     try {
       const projects = await Project.findAll();
       return projects;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findProjectById(id) {
+    try {
+      const project = await Project.findByPk(id);
+      return project;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findUserProject(param) {
+    try {
+      const userProject = await UserProject.findOne({
+        where: param,
+      });
+      return userProject;
     } catch (error) {
       throw error;
     }

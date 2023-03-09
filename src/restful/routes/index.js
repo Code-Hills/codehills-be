@@ -18,7 +18,9 @@ router.all(`${url}/`, (req, res) => {
   return res.status(200).json({ message: "Welcome to codehills backend!" });
 });
 router.use("*", (req, res) => {
-  res.status(404).json({ status: 404, message: "This endpoint is not exist" });
+  res
+    .status(404)
+    .json({ status: 404, message: "This endpoint does not exist" });
 });
 
 export default router;

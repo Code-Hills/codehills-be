@@ -7,5 +7,6 @@ const router = Router();
 router.post("/", UserControllers.addUser);
 router.get("/", protect, UserControllers.getAllUsers);
 router.put("/assign-role", protect, UserControllers.assignRoles);
+router.get("/:userId/projects", protect, UserControllers.getUserProjects);
 
 export default router;

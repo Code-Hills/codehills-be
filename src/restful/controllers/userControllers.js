@@ -66,7 +66,30 @@ export default class UserControllers {
         .status(401)
         .json({ message: "Not Authorized! Only admin can assign roles" });
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  }
+
+  static async getUserProjects(req, res) {
+    try {
+      const { userId } = req.params;
+      const user = await UserService.findUserById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+      const projects = await user.getProjects({
+        attributes: ["name", "description", "startDate", "endDate"],
+        through: {
+          attributes: [],
+        },
+        joinTableAttributes: [],
+      });
+      return res
+        .status(200)
+        .json({ message: "User Projects", projects: projects });
+    } catch (error) {
+      console.error(error);
       return res.status(500).json({ message: "Server error" });
     }
   }
