@@ -6,9 +6,9 @@ const router = Router();
 
 router.post("/", UserControllers.addUser);
 router.get("/", protect, UserControllers.getAllUsers);
-router.put("/assign-role", protect, UserControllers.assignRoles);
 router.put("/deactivate", protect, UserControllers.deactivateUser);
 router.put("/activate", protect, UserControllers.activateUser);
+router.put("/roles", protect, UserControllers.assignRoles);
 router.get("/:userId/projects", protect, UserControllers.getUserProjects);
 
 export default router;

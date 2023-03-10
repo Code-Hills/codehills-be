@@ -3,6 +3,11 @@ import projectService from "../../services/projectService";
 import UserService from "../../services/userService";
 const { UserProject } = db;
 
+const { createProject, findAllProjects, findProjectById, findUserProject } =
+  projectService;
+
+const { findOneUser } = UserService;
+
 export default class projectController {
   static async createProject(req, res) {
     try {
@@ -10,8 +15,10 @@ export default class projectController {
       if (user && user.role === "admin") {
         const { name, description, startDate, endDate } = req.body;
         const newProject = { name, description, startDate, endDate };
-        const project = await projectService.createProject(newProject);
-        return res.status(201).json(project);
+        const project = await createProject(newProject);
+        return res
+          .status(201)
+          .json({ message: "Project created successfully!", project: project });
       }
       return res
         .status(401)
@@ -26,8 +33,11 @@ export default class projectController {
     try {
       const user = req.user;
       if (user && user.role === "admin") {
-        const projects = await projectService.findAllProjects();
-        return res.status(200).json(projects);
+        const projects = await findAllProjects();
+        return res.status(200).json({
+          message: "All projects retrieved successfully!",
+          projects: projects,
+        });
       }
       return res
         .status(401)
@@ -43,19 +53,20 @@ export default class projectController {
       const user = req.user;
       if (user && user.role === "admin") {
         const projectId = req.params.projectId;
-        const userId = req.body.userId;
+        const email = req.body.email;
 
-        const user = await UserService.findUserById(userId);
+        const user = await findOneUser({ email });
         if (!user) {
           return res.status(404).json({ error: "User not found" });
         }
 
-        const project = await projectService.findProjectById(projectId);
+        const project = await findProjectById(projectId);
         if (!project) {
           return res.status(404).json({ error: "Project not found" });
         }
 
-        const userProject = await projectService.findUserProject({
+        const userId = user.id;
+        const userProject = await findUserProject({
           userId,
           projectId,
         });
@@ -82,18 +93,21 @@ export default class projectController {
     try {
       const user = req.user;
       if (user && user.role === "admin") {
-        const { userId, projectId } = req.params;
+        const { projectId } = req.params;
 
-        const user = await UserService.findUserById(userId);
+        const email = req.body.email;
+
+        const user = await findOneUser({ email });
         if (!user) {
           return res.status(404).json({ error: "User not found" });
         }
 
-        const project = await projectService.findProjectById(projectId);
+        const project = await findProjectById(projectId);
         if (!project) {
           return res.status(404).json({ error: "Project not found" });
         }
 
+        const userId = user.id;
         const userProject = await UserProject.findOne({
           where: { userId, projectId },
         });
@@ -121,7 +135,7 @@ export default class projectController {
   static async getProjectUsers(req, res) {
     try {
       const { projectId } = req.params;
-      const project = await projectService.findProjectById(projectId);
+      const project = await findProjectById(projectId);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
@@ -147,7 +161,7 @@ export default class projectController {
       const user = req.user;
       if (user && user.role === "admin") {
         const { projectId } = req.params;
-        const project = await projectService.findProjectById(projectId);
+        const project = await findProjectById(projectId);
         if (!project) {
           return res.status(404).json({ error: "Project not found" });
         }
@@ -170,7 +184,7 @@ export default class projectController {
       const user = req.user;
       if (user && user.role === "admin") {
         const { projectId } = req.params;
-        const project = await projectService.findProjectById(projectId);
+        const project = await findProjectById(projectId);
         if (!project) {
           return res.status(404).json({ error: "Project not found" });
         }
@@ -179,7 +193,7 @@ export default class projectController {
         await project.update(updatedProject);
         return res
           .status(200)
-          .json({ message: "Project updated successfully" });
+          .json({ message: "Project updated successfully", updatedProject });
       }
       return res
         .status(401)
@@ -193,11 +207,13 @@ export default class projectController {
   static async getProject(req, res) {
     try {
       const { projectId } = req.params;
-      const project = await projectService.findProjectById(projectId);
+      const project = await findProjectById(projectId);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
-      return res.status(200).json({ project });
+      return res
+        .status(200)
+        .json({ message: "Project retrieved successfully", project });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Server error" });
