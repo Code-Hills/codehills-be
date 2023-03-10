@@ -21,8 +21,14 @@ export default class UserControllers {
 
   static async getAllUsers(req, res) {
     try {
-      const users = await User.findAll();
-      res.json(users);
+      const admin = req.user;
+      if (admin && admin.role === "admin") {
+        const users = await User.findAll();
+        res.status(200).json({ message: "Retrieved all users", users });
+      }
+      return res.status(401).json({
+        message: "Not authorized! Only admin can get a list of all users",
+      });
     } catch (error) {
       res.status(500).json({ message: "Server error" });
     }
@@ -73,21 +79,29 @@ export default class UserControllers {
 
   static async getUserProjects(req, res) {
     try {
+      const user = req.user;
       const { userId } = req.params;
-      const user = await UserService.findUserById(userId);
-      if (!user) {
+      const userExist = await UserService.findUserById(userId);
+      if (!userExist) {
         return res.status(404).json({ message: "User not found!" });
       }
-      const projects = await user.getProjects({
-        attributes: ["name", "description", "startDate", "endDate"],
-        through: {
-          attributes: [],
-        },
-        joinTableAttributes: [],
+
+      // Check if user is accessing their own projects
+      if (user.id === userId || user.role === "admin") {
+        const projects = await userExist.getProjects({
+          attributes: ["name", "description", "startDate", "endDate"],
+          through: {
+            attributes: [],
+          },
+          joinTableAttributes: [],
+        });
+        return res.status(200).json({ message: "User Projects", projects });
+      }
+
+      // Return an error if user is not authorized to view the projects
+      return res.status(401).json({
+        message: "Not Authorized! You can only view your own projects.",
       });
-      return res
-        .status(200)
-        .json({ message: "User Projects", projects: projects });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Server error" });

@@ -18,14 +18,10 @@ const projectRouter = Router();
 projectRouter.get("/", protect, getAllProjects);
 projectRouter.post("/create", protect, createProject);
 projectRouter.get("/:projectId", protect, getProject);
-projectRouter.put("/:projectId/update", protect, updateProject);
-projectRouter.delete("/:projectId/delete", protect, deleteProject);
+projectRouter.put("/:projectId", protect, updateProject);
+projectRouter.delete("/:projectId", protect, deleteProject);
 projectRouter.get("/:projectId/users", protect, getProjectUsers);
-projectRouter.post("/:projectId/users", protect, addUserToProject);
-projectRouter.delete(
-  "/:projectId/users/:userId",
-  protect,
-  removeUserFromProject
-);
+projectRouter.put("/:projectId/users", protect, addUserToProject);
+projectRouter.delete("/:projectId/users", protect, removeUserFromProject);
 
 export default projectRouter;
