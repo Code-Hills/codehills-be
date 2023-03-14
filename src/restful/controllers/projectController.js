@@ -14,6 +14,11 @@ export default class projectController {
       const user = req.user;
       if (user && user.role === "admin") {
         const { name, description, startDate, endDate } = req.body;
+        if (new Date(startDate) > new Date(endDate)) {
+          return res
+            .status(400)
+            .json({ error: "End date must be after the start date!" });
+        }
         const newProject = { name, description, startDate, endDate };
         const project = await createProject(newProject);
         return res
@@ -189,6 +194,11 @@ export default class projectController {
           return res.status(404).json({ error: "Project not found" });
         }
         const { name, description, startDate, endDate } = req.body;
+        if (new Date(startDate) > new Date(endDate)) {
+          return res
+            .status(400)
+            .json({ error: "End date must be after the start date!" });
+        }
         const updatedProject = { name, description, startDate, endDate };
         await project.update(updatedProject);
         return res
