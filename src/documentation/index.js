@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import swaggerDoc from "./swagger.json";
 import user from "./users";
 import auth from "./auth";
+import projects from "./projects";
 
 const defaults = swaggerDoc.paths;
 
@@ -16,6 +17,7 @@ const paths = {
   ...defaults,
   ...auth,
   ...user,
+  ...projects,
 };
 
 const config = {
@@ -33,6 +35,7 @@ const config = {
       type: "apiKey",
       name: "Authorization",
       in: "header",
+      description: "Enter your JWT token in the format 'Bearer token'.",
     },
   },
   tags: [

@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import UserService from "../../services/userService";
+
 const protect = async (req, res, next) => {
   let token;
   if (
@@ -15,7 +16,7 @@ const protect = async (req, res, next) => {
         return res
           .status(401)
           .json({ message: "Not Authorized, Not logged in" });
-      // Set the user id in the req
+      // Set the user in the req
       req.user = user;
       next();
     } catch (error) {

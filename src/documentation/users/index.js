@@ -35,7 +35,7 @@ const users = {
       responses,
     },
   },
-  "/users/assign-role": {
+  "/users/roles": {
     put: {
       tags: ["Admin"],
       security: [{ JWT: [] }],
@@ -50,6 +50,26 @@ const users = {
               email: "admin@codehills.com",
               role: "manager",
             },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
+  "/users/{userId}/projects": {
+    get: {
+      tags: ["Users"],
+      security: [{ JWT: [] }],
+      summary: "Get all projects assigned to a user",
+      parameters: [
+        {
+          in: "path",
+          name: "userId",
+          required: true,
+          schema: {
+            example: "566febd2-d3f3-4ae3-ac76-a5ef5426366d",
           },
         },
       ],
