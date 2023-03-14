@@ -34,6 +34,7 @@ const ProjectModel = () => {
     {
       sequelize,
       modelName: "Project",
+      tableName: "Projects",
     }
   );
 

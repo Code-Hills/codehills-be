@@ -108,6 +108,35 @@ describe("Projects Tests", () => {
   });
 
   describe("Add Users to a project", () => {
+    it("should add user to project", async () => {
+      // Make a request to add the user to the project
+      console.log("project-------", project);
+      console.log("URLLLLL-------", `${projectsRoute}/${project.id}/users`);
+      const res = await request(app)
+        .put(`${projectsRoute}/${project.id}/users`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ email: "jdoe@example.com" }); //seeds
+
+      console.log("res-------", res.body, res.status);
+      expect(res).to.have.status(200);
+      expect(res.body)
+        .to.have.property("message")
+        .to.equal("User added to project");
+    });
+
+    it("should return an error if user is already assigned to the project", async () => {
+      // Make a request to add the user to the project again
+      const res = await request(app)
+        .put(`${projectsRoute}/${project.id}/users`)
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({ email: "jdoe@example.com" });
+
+      expect(res).to.have.status(400);
+      expect(res.body)
+        .to.have.property("error")
+        .to.equal("User is already assigned to this project");
+    });
+
     it("should return an error if project is not found", async () => {
       const nonExistId = "8a2a4287-fd47-45f9-a1a0-42e24aeeedda";
       // Make a request to add the user to a non-existing project

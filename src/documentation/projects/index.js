@@ -3,7 +3,7 @@ import responses from "../responses";
 const projects = {
   "/projects": {
     get: {
-      tags: ["Admin"],
+      tags: ["Projects"],
       summary: "Get all projects",
       description:
         "Get all projects. Only admin users can get a list of all projects.",
@@ -16,7 +16,7 @@ const projects = {
 
   "/projects/create": {
     post: {
-      tags: ["Admin"],
+      tags: ["Projects"],
       summary: "Create a new project",
       description:
         "Create a new project. Only admin users can create projects.",
@@ -30,8 +30,8 @@ const projects = {
             example: {
               name: "Project name",
               description: "Project description",
-              startDate: "2023-03-09T13:33:43.076Z",
-              endDate: "2023-03-09T13:33:43.076Z",
+              startDate: "2023-03-20",
+              endDate: "2023-03-28",
             },
           },
         },
@@ -61,7 +61,7 @@ const projects = {
       responses,
     },
     put: {
-      tags: ["Admin"],
+      tags: ["Projects"],
       summary: "Update a project",
       description: "Update a project. Only admin users can update a project.",
       security: [{ JWT: [] }],
@@ -92,7 +92,7 @@ const projects = {
       responses,
     },
     delete: {
-      tags: ["Admin"],
+      tags: ["Projects"],
       summary: "Delete a project",
       description: "Delete a project. Only admin users can delete a project.",
       security: [{ JWT: [] }],
@@ -113,7 +113,7 @@ const projects = {
 
   "/projects/{projectId}/users": {
     get: {
-      tags: ["Admin"],
+      tags: ["Projects"],
       summary: "Get all users assigned on a project",
       description:
         "Get all users on a project. Only admin users can get a list of all users in a project.",
@@ -133,7 +133,7 @@ const projects = {
     },
 
     put: {
-      tags: ["Admin"],
+      tags: ["Projects"],
       summary: "Add a user to a project",
       description:
         "Assign a user to a project. Only admin users can assign a user to a project.",
@@ -162,7 +162,7 @@ const projects = {
       responses,
     },
     delete: {
-      tags: ["Admin"],
+      tags: ["Projects"],
       summary: "Remove a user from a project",
       description:
         "Remove a user from a project. Only admin users can remove a user from a project.",
