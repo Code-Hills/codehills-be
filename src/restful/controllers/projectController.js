@@ -14,6 +14,12 @@ export default class projectController {
       const user = req.user;
       if (user && user.role === "admin") {
         const { name, description, startDate, endDate } = req.body;
+        const currentDate = new Date();
+        if (new Date(startDate) < currentDate) {
+          return res
+            .status(400)
+            .json({ message: "Start date cannot be in the past" });
+        }
         if (new Date(startDate) > new Date(endDate)) {
           return res
             .status(400)
@@ -224,6 +230,50 @@ export default class projectController {
       return res
         .status(200)
         .json({ message: "Project retrieved successfully", project });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Server error" });
+    }
+  }
+
+  static async updateProjectLead(req, res) {
+    const user = req.user;
+    try {
+      if (user && user.role === "admin") {
+        const { projectId } = req.params;
+
+        const email = req.body.email;
+        const user = await findOneUser({ email });
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        const project = await findProjectById(projectId);
+        if (!project) {
+          return res.status(404).json({ error: "Project not found" });
+        }
+
+        if (user.role !== "architect") {
+          return res.status(400).json({
+            error: "Only an architect can be assigned as a project lead",
+          });
+        }
+
+        if (project.projectLeadId === user.id) {
+          return res.status(400).json({
+            message: "This architect is already assigned to this project!",
+          });
+        }
+
+        await project.update({ projectLeadId: user.id });
+
+        return res
+          .status(200)
+          .json({ message: "Added a project lead successfully!" });
+      }
+      return res.status(401).json({
+        message: "Not Authorized! Only admin can update a project lead",
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Server error" });

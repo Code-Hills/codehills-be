@@ -18,6 +18,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT,
       },
+      projectLeadId: {
+        type: Sequelize.UUID,
+        references: {
+          model: "tbl_users",
+          key: "id",
+        },
+      },
       startDate: {
         type: Sequelize.DATE,
       },

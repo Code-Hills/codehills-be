@@ -17,7 +17,7 @@ describe("Assign roles tests", () => {
     const token = loginRes.body.token;
 
     request(app)
-      .put(AssignRolesRoute)
+      .patch(AssignRolesRoute)
       .set("Authorization", `Bearer ${token}`)
       .send({ email: "janedoe@example", role: "manager" }) // user must be in seeds
       .end((err, res) => {
@@ -35,7 +35,7 @@ describe("Assign roles tests", () => {
     const loginRes = await request(app).post(loginRoute).send(user);
     const token = loginRes.body.token;
     request(app)
-      .put(AssignRolesRoute)
+      .patch(AssignRolesRoute)
       .set("Authorization", `Bearer ${token}`)
       .send({ email: "nonexistent@example.com", role: "manager" })
       .end((err, res) => {
@@ -53,7 +53,7 @@ describe("Assign roles tests", () => {
     const loginRes = await request(app).post(loginRoute).send(user);
     const token = loginRes.body.token;
     request(app)
-      .put(AssignRolesRoute)
+      .patch(AssignRolesRoute)
       .set("Authorization", `Bearer ${token}`)
       .send({ email: "codehill@admin.com", role: "manager" })
       .end((err, res) => {
@@ -69,7 +69,7 @@ describe("Assign roles tests", () => {
       const loginRes = await request(app).post(loginRoute).send(user);
       const token = loginRes.body.token;
       request(app)
-        .put(AssignRolesRoute)
+        .patch(AssignRolesRoute)
         .set("Authorization", `Bearer ${token}`)
         .send({ email: "janedoe@example", role: "manager" })
         .end((err, res) => {

@@ -59,4 +59,14 @@ export default class projectService {
       throw error;
     }
   }
+
+  static async getProjectLead(id) {
+    try {
+      const project = await Project.findByPk(id);
+      const project_lead = project?.project_lead;
+      return project_lead;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

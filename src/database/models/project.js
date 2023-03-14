@@ -24,6 +24,13 @@ const ProjectModel = () => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      projectLeadId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "tbl_users",
+          key: "id",
+        },
+      },
       startDate: {
         type: DataTypes.DATE,
       },

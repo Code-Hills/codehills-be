@@ -11,6 +11,7 @@ describe("Projects Tests", () => {
   let adminToken;
   let userToken;
   let project;
+  const startDate = new Date();
   before(async () => {
     // Get admin and user token before running tests
     // login an admin user
@@ -30,8 +31,8 @@ describe("Projects Tests", () => {
       .send({
         name: "New Project",
         description: "A new project created by admin user",
-        startDate: "2023-03-10",
-        endDate: "2023-04-10",
+        startDate: new Date(startDate.getTime() + 2 * 24 * 60 * 60 * 1000),
+        endDate: new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000),
       });
 
     project = projRes.body.project;
@@ -45,8 +46,8 @@ describe("Projects Tests", () => {
         .send({
           name: "Test Project",
           description: "A new project created by admin user",
-          startDate: "2023-03-5",
-          endDate: "2023-04-10",
+          startDate: new Date(startDate.getTime() + 2 * 24 * 60 * 60 * 1000),
+          endDate: new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000),
         })
         .end((err, res) => {
           expect(res).to.have.status(201);
@@ -65,8 +66,8 @@ describe("Projects Tests", () => {
         .send({
           name: "New Project",
           description: "A new project created by non-admin user",
-          startDate: "2023-03-10",
-          endDate: "2023-04-10",
+          startDate: new Date(),
+          endDate: new Date() + 7 * 24 * 60 * 60 * 1000,
         })
         .end((err, res) => {
           expect(res).to.have.status(401);
@@ -110,14 +111,10 @@ describe("Projects Tests", () => {
   describe("Add Users to a project", () => {
     it("should add user to project", async () => {
       // Make a request to add the user to the project
-      console.log("project-------", project);
-      console.log("URLLLLL-------", `${projectsRoute}/${project.id}/users`);
       const res = await request(app)
         .put(`${projectsRoute}/${project.id}/users`)
         .set("Authorization", `Bearer ${adminToken}`)
         .send({ email: "jdoe@example.com" }); //seeds
-
-      console.log("res-------", res.body, res.status);
       expect(res).to.have.status(200);
       expect(res.body)
         .to.have.property("message")

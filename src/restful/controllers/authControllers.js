@@ -61,7 +61,6 @@ class AuthController {
           `${FRONTEND_URL}/login?code=${responseBuffer.toString("base64")}`
         );
       }
-      console.log("ERrooo---", error.message);
       const apiResponse = {
         status: 500,
         message: error.message,

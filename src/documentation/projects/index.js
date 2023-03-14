@@ -60,7 +60,7 @@ const projects = {
       consumes: ["application/json"],
       responses,
     },
-    put: {
+    patch: {
       tags: ["Projects"],
       summary: "Update a project",
       description: "Update a project. Only admin users can update a project.",
@@ -166,6 +166,37 @@ const projects = {
       summary: "Remove a user from a project",
       description:
         "Remove a user from a project. Only admin users can remove a user from a project.",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          in: "path",
+          name: "projectId",
+          required: true,
+          schema: {
+            example: "566febd2-d3f3-4ae3-ac76-a5ef5426366d",
+          },
+        },
+        {
+          in: "body",
+          name: "body",
+          required: true,
+          schema: {
+            example: {
+              email: "johndoe@email.com",
+            },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
+  "/projects/{projectId}/lead": {
+    patch: {
+      tags: ["Projects"],
+      summary: "Add a project lead",
+      description: "Add a project lead. Only admin can add a project lead",
       security: [{ JWT: [] }],
       parameters: [
         {
