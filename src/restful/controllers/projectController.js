@@ -236,7 +236,7 @@ export default class projectController {
     }
   }
 
-  static async updateProjectLead(req, res) {
+  static async setProjectLead(req, res) {
     const user = req.user;
     try {
       if (user && user.role === "admin") {

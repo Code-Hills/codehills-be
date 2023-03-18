@@ -2,9 +2,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/sequelize";
 
-// import DB from "..";
-// const { Project, UserProject } = DB;
-
 class User extends Model {}
 const UserModel = () => {
   User.init(

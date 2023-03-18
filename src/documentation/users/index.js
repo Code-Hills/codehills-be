@@ -58,7 +58,7 @@ const users = {
     },
   },
   "/users/activate": {
-    put: {
+    patch: {
       tags: ["Admin"],
       security: [{ JWT: [] }],
       summary: "Activate user",
@@ -79,7 +79,7 @@ const users = {
     },
   },
   "/users/deactivate": {
-    put: {
+    patch: {
       tags: ["Admin"],
       security: [{ JWT: [] }],
       summary: "Deactivate user",
