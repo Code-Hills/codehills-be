@@ -82,6 +82,10 @@ class AuthController {
         return res.status(404).json({ message: "user not found!" });
       }
 
+      if (!userExist.isActivated) {
+        return res.status(403).json({ message: "user is not activated!" });
+      }
+
       userExist.isLoggedIn = true;
       await UserService.updateUser({ isLoggedIn: true }, { email: email });
       const token = jwt.sign(userExist?.toJSON(), JWT_SECRET, {
