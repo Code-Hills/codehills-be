@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import UserService from "../../services/userService";
+
 const protect = async (req, res, next) => {
   let token;
   if (

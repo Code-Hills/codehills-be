@@ -35,8 +35,8 @@ const users = {
       responses,
     },
   },
-  "/users/assign-role": {
-    put: {
+  "/users/roles": {
+    patch: {
       tags: ["Admin"],
       security: [{ JWT: [] }],
       summary: "Assign roles",
@@ -48,7 +48,7 @@ const users = {
           schema: {
             example: {
               email: "admin@codehills.com",
-              role: "manager",
+              role: "architect",
             },
           },
         },
@@ -58,7 +58,7 @@ const users = {
     },
   },
   "/users/activate": {
-    put: {
+    patch: {
       tags: ["Admin"],
       security: [{ JWT: [] }],
       summary: "Activate user",
@@ -79,7 +79,7 @@ const users = {
     },
   },
   "/users/deactivate": {
-    put: {
+    patch: {
       tags: ["Admin"],
       security: [{ JWT: [] }],
       summary: "Deactivate user",
@@ -92,6 +92,26 @@ const users = {
             example: {
               email: "email@example.com",
             },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
+  "/users/{userId}/projects": {
+    get: {
+      tags: ["Users"],
+      security: [{ JWT: [] }],
+      summary: "Get all projects assigned to a user",
+      parameters: [
+        {
+          in: "path",
+          name: "userId",
+          required: true,
+          schema: {
+            example: "566febd2-d3f3-4ae3-ac76-a5ef5426366d",
           },
         },
       ],
