@@ -48,7 +48,6 @@ module.exports = {
         SwiftCode: Sequelize.NUMBER,
         Currency: Sequelize.STRING,
       }),
-      currentProject: Sequelize.UUID,
       gender: Sequelize.STRING,
       createdAt: {
         allowNull: false,

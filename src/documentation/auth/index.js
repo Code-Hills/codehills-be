@@ -112,13 +112,6 @@ const auth = {
         },
         {
           in: "formData",
-          name: "currentProject",
-          schema: {
-            example: "939f62a9-5077-4600-ad51-21a15d8eeed3",
-          },
-        },
-        {
-          in: "formData",
           name: "gender",
           type: "string",
           schema: {

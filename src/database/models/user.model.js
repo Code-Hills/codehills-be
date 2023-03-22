@@ -24,7 +24,6 @@ const UserModel = () => {
         SwiftCode: DataTypes.NUMBER,
         Currency: DataTypes.STRING,
       }),
-      currentProject: DataTypes.UUID,
       gender: DataTypes.STRING,
       role: {
         type: DataTypes.ENUM("developer", "manager", "architect", "admin"),
