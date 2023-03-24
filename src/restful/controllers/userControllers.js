@@ -2,6 +2,7 @@ import Response from "./../../system/helpers/Response";
 import DB from "./../../database";
 import UserService from "../../services/userService";
 import { fileUploader } from "../../system/fileUploader";
+import notificationService from "../../services/notificationService";
 const { User } = DB;
 
 export default class UserControllers {
@@ -65,6 +66,16 @@ export default class UserControllers {
             returning: true,
           }
         );
+        const notification = {
+          title: "Assigned new role!",
+          description: `${userExist.displayName} have been assigned a role of ${role}`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          userId: userExist.id,
+        };
+        await notificationService.createNotification(notification);
         return res
           .status(200)
           .json({ message: "Assigned a role successfully!" });
@@ -137,9 +148,20 @@ export default class UserControllers {
             returning: true,
           }
         );
-        return res
-          .status(200)
-          .json({ message: "User deactivated successfully!" });
+
+        const notification = {
+          title: "Account deactivated!",
+          description: `${userExist.displayName}'s account have been deactivated`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          userId: userExist.id,
+        };
+        await notificationService.createNotification(notification);
+        return res.status(200).json({
+          message: "User deactivated successfully!",
+        });
       }
       return res
         .status(401)
@@ -171,6 +193,18 @@ export default class UserControllers {
             returning: true,
           }
         );
+
+        const notification = {
+          title: "Account activated!",
+          description: `${userExist.displayName}'s account have been activated`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          userId: userExist.id,
+        };
+        await notificationService.createNotification(notification);
+
         return res
           .status(200)
           .json({ message: "User activated successfully!" });
@@ -239,6 +273,23 @@ export default class UserControllers {
         message: "server error",
         error: error.message,
       });
+    }
+  }
+
+  static async getUserById(req, res) {
+    try {
+      const { userId } = req.params;
+      const userExist = await UserService.findUserById(userId);
+      if (!userExist) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      return res
+        .status(200)
+        .json({ message: "user retrieved successfully", user: userExist });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Server error" });
     }
   }
 }

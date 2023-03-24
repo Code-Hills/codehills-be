@@ -1,4 +1,5 @@
 import db from "../../database";
+import notificationService from "../../services/notificationService";
 import projectService from "../../services/projectService";
 import UserService from "../../services/userService";
 const { UserProject } = db;
@@ -88,7 +89,16 @@ export default class projectController {
         }
 
         await project.addUsers(user);
-
+        const notification = {
+          title: "Added to the project!",
+          description: `${user.displayName} have been added to the ${project.name} project`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          userId: user.id,
+        };
+        await notificationService.createNotification(notification);
         return res.status(200).json({ message: "User added to project" });
       }
       return res.status(401).json({
@@ -129,7 +139,16 @@ export default class projectController {
         }
 
         await project.removeUsers(user);
-
+        const notification = {
+          title: "Removed from the project!",
+          description: `${user.displayName} have been removed from the ${project.name} project`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          userId: user.id,
+        };
+        await notificationService.createNotification(notification);
         return res
           .status(200)
           .json({ message: "Successfully removed the user from project" });
@@ -266,7 +285,16 @@ export default class projectController {
         }
 
         await project.update({ projectLeadId: user.id });
-
+        const notification = {
+          title: "Added to the project as lead!",
+          description: `${user.displayName} have been added to the ${project.name} project as the project lead`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          userId: user.id,
+        };
+        await notificationService.createNotification(notification);
         return res
           .status(200)
           .json({ message: "Added a project lead successfully!" });
