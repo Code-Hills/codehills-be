@@ -1,4 +1,5 @@
 import db from "../../database";
+import sendEmail from "../../services/emailService";
 import notificationService from "../../services/notificationService";
 import projectService from "../../services/projectService";
 import UserService from "../../services/userService";
@@ -8,6 +9,7 @@ const { createProject, findAllProjects, findProjectById, findUserProject } =
   projectService;
 
 const { findOneUser } = UserService;
+const { createNotification } = notificationService;
 
 export default class projectController {
   static async createProject(req, res) {
@@ -62,8 +64,8 @@ export default class projectController {
 
   static async addUserToProject(req, res) {
     try {
-      const user = req.user;
-      if (user && user.role === "admin") {
+      const admin = req.user;
+      if (admin && admin.role === "admin") {
         const projectId = req.params.projectId;
         const email = req.body.email;
 
@@ -89,16 +91,43 @@ export default class projectController {
         }
 
         await project.addUsers(user);
-        const notification = {
+        const userNotification = {
           title: "Added to the project!",
-          description: `${user.displayName} have been added to the ${project.name} project`,
+          description: `You have been added to the ${project.name} project`,
           url:
             process.env.NODE_ENV === "production"
               ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
               : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
           userId: user.id,
         };
-        await notificationService.createNotification(notification);
+        await createNotification(userNotification);
+        await sendEmail(
+          user.email,
+          "Added to the project",
+          `Hello ${user.name}, You have been added to the "${project.name}" project`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+        );
+
+        const adminNotification = {
+          title: "Added to the project!",
+          description: `You have added ${user.name} to the ${project.name} project`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          userId: user.id,
+        };
+        await createNotification(adminNotification);
+        await sendEmail(
+          admin.email,
+          "Added a user to the project",
+          `Hello admin, You have added ${user.name} to the ${project.name} project`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+        );
         return res.status(200).json({ message: "User added to project" });
       }
       return res.status(401).json({
@@ -112,8 +141,8 @@ export default class projectController {
 
   static async removeUserFromProject(req, res) {
     try {
-      const user = req.user;
-      if (user && user.role === "admin") {
+      const admin = req.user;
+      if (admin && admin.role === "admin") {
         const { projectId } = req.params;
 
         const email = req.body.email;
@@ -139,16 +168,43 @@ export default class projectController {
         }
 
         await project.removeUsers(user);
-        const notification = {
+        const userNotification = {
           title: "Removed from the project!",
-          description: `${user.displayName} have been removed from the ${project.name} project`,
+          description: `You have been removed from the ${project.name} project`,
           url:
             process.env.NODE_ENV === "production"
               ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
               : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
           userId: user.id,
         };
-        await notificationService.createNotification(notification);
+        await createNotification(userNotification);
+        await sendEmail(
+          user.email,
+          "Removed from the project!",
+          `Hello ${user.name}, You have been removed from the "${project.name}" project`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+        );
+
+        const adminNotification = {
+          title: "Removed from the project!",
+          description: `You have removed ${user.name} from the ${project.name} project`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          userId: user.id,
+        };
+        await createNotification(adminNotification);
+        await sendEmail(
+          admin.email,
+          "Removed a user from the project",
+          `Hello admin, You have removed ${user.name} from the ${project.name} project`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+        );
         return res
           .status(200)
           .json({ message: "Successfully removed the user from project" });
@@ -256,14 +312,14 @@ export default class projectController {
   }
 
   static async setProjectLead(req, res) {
-    const user = req.user;
+    const admin = req.user;
     try {
-      if (user && user.role === "admin") {
+      if (admin && admin.role === "admin") {
         const { projectId } = req.params;
 
         const email = req.body.email;
-        const user = await findOneUser({ email });
-        if (!user) {
+        const leadUser = await findOneUser({ email });
+        if (!leadUser) {
           return res.status(404).json({ error: "User not found" });
         }
 
@@ -272,29 +328,51 @@ export default class projectController {
           return res.status(404).json({ error: "Project not found" });
         }
 
-        if (user.role !== "architect") {
+        if (leadUser.role !== "architect") {
           return res.status(400).json({
             error: "Only an architect can be assigned as a project lead",
           });
         }
 
-        if (project.projectLeadId === user.id) {
+        if (project.projectLeadId === leadUser.id) {
           return res.status(400).json({
             message: "This architect is already assigned to this project!",
           });
         }
 
-        await project.update({ projectLeadId: user.id });
-        const notification = {
+        await project.update({ projectLeadId: leadUser.id });
+
+        const leadNotification = {
           title: "Added to the project as lead!",
-          description: `${user.displayName} have been added to the ${project.name} project as the project lead`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
-          userId: user.id,
+          description: `You have been added to the project "${project.name}" as the project lead`,
+          url: `${req.protocol}://${req.get("host")}/projects/${project.id}`,
+          userId: leadUser.id,
         };
-        await notificationService.createNotification(notification);
+        await createNotification(leadNotification);
+        await sendEmail(
+          leadUser.email,
+          "Added to the project as lead!",
+          `Hello ${leadUser.displayName}, You have been added to the project "${project.name}" as the project lead.`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${leadUser.id}/projects`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${leadUser.id}/projects`
+        );
+
+        const adminNotification = {
+          title: "Project lead updated",
+          description: `You have updated the project lead for "${project.name}" to "${leadUser.displayName}"`,
+          url: `${req.protocol}://${req.get("host")}/projects/${project.id}`,
+          userId: admin.id,
+        };
+        await createNotification(adminNotification);
+        await sendEmail(
+          admin.email,
+          "Project lead updated!",
+          `Hello admin, You have added "${leadUser.displayName}" as the project lead for "${project.name}" project.`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${leadUser.id}/projects`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${leadUser.id}/projects`
+        );
         return res
           .status(200)
           .json({ message: "Added a project lead successfully!" });

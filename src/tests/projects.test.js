@@ -119,7 +119,7 @@ describe("Projects Tests", () => {
       expect(res.body)
         .to.have.property("message")
         .to.equal("User added to project");
-    });
+    }).timeout(8000);
 
     it("should return an error if user is already assigned to the project", async () => {
       // Make a request to add the user to the project again

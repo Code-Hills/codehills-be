@@ -3,7 +3,9 @@ import DB from "./../../database";
 import UserService from "../../services/userService";
 import { fileUploader } from "../../system/fileUploader";
 import notificationService from "../../services/notificationService";
+import sendEmail from "../../services/emailService";
 const { User } = DB;
+const { createNotification } = notificationService;
 
 export default class UserControllers {
   static async addUser(req, res) {
@@ -66,16 +68,16 @@ export default class UserControllers {
             returning: true,
           }
         );
-        const notification = {
+        const userNotification = {
           title: "Assigned new role!",
-          description: `${userExist.displayName} have been assigned a role of ${role}`,
+          description: `Your role have been updated to "${role}"`,
           url:
             process.env.NODE_ENV === "production"
               ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
               : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
           userId: userExist.id,
         };
-        await notificationService.createNotification(notification);
+        await createNotification(userNotification);
         return res
           .status(200)
           .json({ message: "Assigned a role successfully!" });
@@ -149,16 +151,44 @@ export default class UserControllers {
           }
         );
 
-        const notification = {
+        const userNotification = {
           title: "Account deactivated!",
-          description: `${userExist.displayName}'s account have been deactivated`,
+          description: `Your codehills account have been deactivated`,
           url:
             process.env.NODE_ENV === "production"
               ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
               : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
           userId: userExist.id,
         };
-        await notificationService.createNotification(notification);
+        await createNotification(userNotification);
+
+        await sendEmail(
+          userExist.email,
+          "Codehills account deactivated!",
+          `Hello ${userExist.displayName}, Your codehills account have been deactivated`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+        );
+
+        const adminNotification = {
+          title: "Account deactivated!",
+          description: `You have deactivated ${userExist.displayName}'s account`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          userId: admin.id,
+        };
+        await createNotification(adminNotification);
+        await sendEmail(
+          admin.email,
+          "Codehills account deactivated!",
+          `Hello admin, You have deactivated ${userExist.displayName}'s codehills account`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+        );
         return res.status(200).json({
           message: "User deactivated successfully!",
         });
@@ -194,16 +224,45 @@ export default class UserControllers {
           }
         );
 
-        const notification = {
+        const userNotification = {
           title: "Account activated!",
-          description: `${userExist.displayName}'s account have been activated`,
+          description: `Your codehills account have been activated`,
           url:
             process.env.NODE_ENV === "production"
               ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
               : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
           userId: userExist.id,
         };
-        await notificationService.createNotification(notification);
+        await createNotification(userNotification);
+
+        await sendEmail(
+          userExist.email,
+          "Codehills account activated!",
+          `Hello ${userExist.displayName}, Your codehills account have been activated`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+        );
+
+        const adminNotification = {
+          title: "Account activated!",
+          description: `You have activated ${userExist.displayName}'s account`,
+          url:
+            process.env.NODE_ENV === "production"
+              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          userId: admin.id,
+        };
+        await createNotification(adminNotification);
+
+        await sendEmail(
+          admin.email,
+          "Codehills account activated!",
+          `Hello admin, You have activated ${userExist.displayName}'s codehills account`,
+          process.env.NODE_ENV === "production"
+            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
+            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+        );
 
         return res
           .status(200)
