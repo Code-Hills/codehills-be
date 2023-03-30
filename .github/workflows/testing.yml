@@ -1,24 +1,20 @@
-name: Test
+name: PostgreSQL Test
 
-on:
-  push:
-    branches: 
-      - develop
-      - main
-    paths-ignore:
-      - '**.md'
-  pull_request:
-    branches: [develop,main]
-    paths-ignore:
-      - '**.md'
-env:
-  NODE_ENV: test
-  TEST_DATABASE_URL: postgres://thunder_user:58hAIQS77klG6uZf58NceFDV57btJN1J@dpg-ce2cksg2i3mkuc8r036g-a.oregon-postgres.render.com/hr_app_test?sslmode=verify-ca
-
+on: [push]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,30 +22,38 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '19.x'
-
-      # - name: Start PostgreSQL container
-      #   uses: docker/compose@v2
-      #   with:
-      #     compose-file: docker-compose.yml
-      #     project-name: postgres
-      #     service-ports: 5432:5432
-      - uses: actions/checkout@v2
-      - name: Build the stack
-        run: docker-compose up -d
-
-      - name: Wait for 1 minutes
-        run: sleep 60
-
       - name: Install dependencies
         run: npm install
-      # - name: Run tests and generate coverage report
+      - name: Run database migration
+        env:
+          DATABASE_URL: postgres://postgres:postgres@0.0.0.0:5432/testdb
+          DEV_DATABASE_URL: postgres://postgres:postgres@0.0.0.0:5432/testdb
+          TEST_DATABASE_URL: postgres://postgres:postgres@0.0.0.0:5432/testdb
+          NODE_ENV: development
+        run:  npm run db:migrate
+      # - name: Run tests and coverage
       #   env:
-      #     DATABASE_URL: postgresql://postgres:password@localhost:5432/mydatabase
-      #     TEST_DATABASE_URL: postgres://postgres:password@localhost:5432/mydatabase
       #     CI: true
       #     NODE_ENV: test
-      #   run: npm run test:coverage
+      #     HOST: "http://localhost:2023"
+      #     PORT: 2023
+      #     API_VERSION: v1
+      #     FRONTEND_URL: http://localhost:3000
+      #     JWT_SECRET: Vl9fTsn0XUC4SSudWkVp1zwvG8kKPUui
+      #     EXPIRES_IN: 30d
+      #     SESSION_KEY : sadjnsaosada
+      #     CLIENTID : 35ca86da-0c16-461b-ba0d-856abf5c299f
+      #     CLIENTSECRET : MtK8Q~9jcPK321HtjKGiuBIcgL.rmejDvLBoNcQ7
+      #     DATABASE_URL: postgres://postgres:postgres@0.0.0.0:5432/testdb
+      #     DEV_DATABASE_URL: postgres://postgres:postgres@0.0.0.0:5432/testdb
+      #     TEST_DATABASE_URL: postgres://postgres:postgres@0.0.0.0:5432/testdb
+      #   run:  npm run test:coverage && npm run coverage
+      # - name: Upload coverage report to Codecov
+      #   uses: codecov/codecov-action@v2
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     files: coverage.lcov
+      #     flags: unittests
       #     path-to-lcov: ./coverage/lcov.info
       # - name: Coveralls Finished
       #   run: env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn coverage --if-present
-
