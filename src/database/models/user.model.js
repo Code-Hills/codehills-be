@@ -17,6 +17,7 @@ const UserModel = () => {
       displayName: DataTypes.STRING,
       avatar: DataTypes.STRING,
       microsoftId: DataTypes.UUID,
+      telephone: DataTypes.STRING,
       address: DataTypes.JSONB(),
       bank: DataTypes.JSONB({
         accountName: DataTypes.STRING,

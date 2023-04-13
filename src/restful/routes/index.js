@@ -6,6 +6,7 @@ import profileRouter from "./profile";
 import uploadRoute from "./_upload";
 import { router as authRouter } from "./authRouters";
 import projectRouter from "./projectRoutes";
+import reviewRouter from "./reviewRouter";
 
 const API_VERSION = process.env.API_VERSION || "v1";
 const url = `/api/${API_VERSION}`;
@@ -16,6 +17,7 @@ router.use(`${url}/users`, userRoutes);
 router.use(`${url}/auth`, authRouter);
 router.use(`${url}/projects`, projectRouter);
 router.use(`${url}/profile`, profileRouter);
+router.use(`${url}/reviews`, reviewRouter);
 router.use("/uploads", uploadRoute);
 
 router.all(`${url}/`, (req, res) => {

@@ -3,6 +3,7 @@ import swaggerDoc from "./swagger.json";
 import user from "./users";
 import auth from "./auth";
 import projects from "./projects";
+import reviews from "./review";
 
 const defaults = swaggerDoc.paths;
 
@@ -18,6 +19,7 @@ const paths = {
   ...auth,
   ...user,
   ...projects,
+  ...reviews,
 };
 
 const config = {
