@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import UserService from "./../../services/userService";
 import Response from "../../system/helpers/Response";
-import { getImageUrl } from './../../system/helpers/getImage';
+import { getImageUrl } from "./../../system/helpers/getImage";
 
 dotenv.config();
 const { JWT_SECRET, FRONTEND_URL, EXPIRES_IN } = process.env;
