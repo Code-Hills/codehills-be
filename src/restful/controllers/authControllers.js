@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import UserService from "./../../services/userService";
 import Response from "../../system/helpers/Response";
+import { getImageUrl } from "./../../system/helpers/getImage";
 
 dotenv.config();
 const { JWT_SECRET, FRONTEND_URL, EXPIRES_IN } = process.env;
@@ -94,7 +95,6 @@ class AuthController {
 
       return res.status(200).json({ message: "user logged in", token: token });
     } catch (error) {
-      console.log(error);
       return res
         .status(500)
         .json({ message: "Server error", error: error.message });
@@ -111,7 +111,7 @@ class AuthController {
         });
       }
       userExist.avatar = userExist?.avatar?.startsWith("media-")
-        ? `${process.env.HOST}/uploads/${userExist?.avatar}`
+        ? getImageUrl(userExist?.avatar)
         : userExist?.avatar;
       return Response.success(res, 200, {
         message: "user profile retreived successfully",
