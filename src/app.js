@@ -2,6 +2,7 @@
 import express from "express";
 import session from "express-session";
 import dotenv from "dotenv";
+import cors from "cors";
 import DB from "./database";
 import router from "./restful/routes/index";
 import fileUploader from "express-fileupload";
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 app.use(express.json());
 app.use(
   session({
