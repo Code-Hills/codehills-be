@@ -22,7 +22,7 @@ const auth = {
           required: true,
           schema: {
             example: {
-              email: "email@example.com",
+              email: "codehill@admin.com",
             },
           },
         },
