@@ -17,8 +17,7 @@ export default class ReviewControllers {
         });
       }
       const type = await reviewerType(revieweeId, reviewerId);
-      let ratingz =
-        type === "manager review" || "peer review" ? Number(ratings) : null;
+      let ratingz = type === "manager review" ? Number(ratings) : null;
       ReviewService.create({
         revieweeId,
         reviewerId,
