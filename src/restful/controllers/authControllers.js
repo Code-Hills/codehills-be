@@ -22,6 +22,7 @@ class AuthController {
   static async loginCallback(req, res) {
     try {
       req.user.role = "developer";
+      req.user.isLoggedIn = true;
       req.user.email = req.user?.email?.toLowerCase();
       const user = await UserService.findOrCreateUser(req.user);
 

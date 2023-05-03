@@ -39,7 +39,7 @@ module.exports = {
       },
       isLoggedIn: {
         type: Sequelize.BOOLEAN,
-        default: true,
+        default: false,
       },
       address: Sequelize.JSONB(),
       bank: Sequelize.JSONB({
