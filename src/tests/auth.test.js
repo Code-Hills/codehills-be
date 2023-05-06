@@ -82,7 +82,7 @@ describe("Auth Middleware tests", () => {
     const res = await request(app).get(protectedRoute);
 
     expect(res).to.have.status(401);
-    expect(res.body).to.have.property("message", "Not Authenticated!");
+    expect(res.body).to.have.property("error", "Not Authenticated!");
   });
 
   it("should not allow access to protected route with an invalid token", async () => {
@@ -92,6 +92,6 @@ describe("Auth Middleware tests", () => {
       .set("Authorization", "Bearer invalidtoken");
 
     expect(res).to.have.status(401);
-    expect(res.body).to.have.property("message", "Not Authorized!");
+    expect(res.body).to.have.property("error", "Not Authorized!");
   });
 });

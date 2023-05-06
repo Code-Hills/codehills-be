@@ -9,11 +9,6 @@ const protect = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-
-      if (!token) {
-        return res.status(401).json({ error: "Not Authenticated!" });
-      }
-
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const user = await UserService.findUserById(decoded.id);
@@ -29,6 +24,10 @@ const protect = async (req, res, next) => {
       console.log(error);
       return res.status(401).json({ error: "Not Authorized!" });
     }
+  }
+
+  if (!token) {
+    return res.status(401).json({ error: "Not Authenticated!" });
   }
 };
 export default protect;
