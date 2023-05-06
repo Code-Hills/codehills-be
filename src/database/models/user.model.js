@@ -33,10 +33,6 @@ const UserModel = () => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-      isLoggedIn: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
     },
     {
       sequelize,
