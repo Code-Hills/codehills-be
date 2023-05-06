@@ -9,6 +9,13 @@ const protect = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
+
+      const blacklistedToken = await UserService.findBlacklistedToken(token);
+
+      if (blacklistedToken) {
+        return res.status(401).json({ error: "Invalid or revoked token" });
+      }
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const user = await UserService.findUserById(decoded.id);

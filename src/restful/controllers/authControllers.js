@@ -127,10 +127,11 @@ class AuthController {
   static async logout(req, res) {
     try {
       const token = req.headers.authorization.split(" ")[1];
-      // we blacklist this token later
-      // await UserService.blacklistToken(token);
+      await UserService.blacklistToken(token);
       req.user = null;
-      return res.status(200).json({ message: "user logged out" });
+      return Response.success(res, 200, {
+        message: "user logged out",
+      });
     } catch (error) {
       console.log(error);
       return res
