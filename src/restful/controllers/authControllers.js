@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable quotes */
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -87,8 +88,6 @@ class AuthController {
         return res.status(403).json({ message: "user is not activated!" });
       }
 
-      userExist.isLoggedIn = true;
-      await UserService.updateUser({ isLoggedIn: true }, { email: email });
       const token = jwt.sign(userExist?.toJSON(), JWT_SECRET, {
         expiresIn: EXPIRES_IN,
       });
@@ -127,8 +126,10 @@ class AuthController {
 
   static async logout(req, res) {
     try {
-      const { email } = req.user;
-      await UserService.updateUser({ isLoggedIn: false }, { email: email });
+      const token = req.headers.authorization.split(" ")[1];
+      // we blacklist this token later
+      // await UserService.blacklistToken(token);
+      req.user = null;
       return res.status(200).json({ message: "user logged out" });
     } catch (error) {
       console.log(error);

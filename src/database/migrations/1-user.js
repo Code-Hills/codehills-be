@@ -37,10 +37,6 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         default: true,
       },
-      isLoggedIn: {
-        type: Sequelize.BOOLEAN,
-        default: true,
-      },
       address: Sequelize.JSONB(),
       bank: Sequelize.JSONB({
         accountName: Sequelize.STRING,

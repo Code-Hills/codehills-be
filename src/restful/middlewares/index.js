@@ -12,25 +12,22 @@ const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const user = await UserService.findUserById(decoded.id);
-      if (!user.isLoggedIn)
-        return res
-          .status(401)
-          .json({ message: "Not Authorized, Not logged in" });
 
       if (!user.isActivated)
         return res
           .status(401)
-          .json({ message: "Not Authorized,User Account Is Not activated" });
+          .json({ error: "Not Authorized,User Account Is Not activated" });
 
       req.user = user;
       next();
     } catch (error) {
       console.log(error);
-      res.status(401).json({ message: "Not Authorized!" });
+      return res.status(401).json({ error: "Not Authorized!" });
     }
   }
+
   if (!token) {
-    res.status(401).json({ message: "Not Authenticated!" });
+    return res.status(401).json({ error: "Not Authenticated!" });
   }
 };
 export default protect;
