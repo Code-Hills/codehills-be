@@ -15,7 +15,7 @@ const BlacklistedTokenModel = () => {
         unique: true,
       },
       token: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
         unique: true,
       },
