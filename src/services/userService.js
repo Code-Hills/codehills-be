@@ -4,7 +4,7 @@
 import Sequelize from "sequelize";
 
 import DB from "./../database";
-const { User } = DB;
+const { User, BlacklistedToken } = DB;
 
 const { Op } = Sequelize;
 
@@ -97,6 +97,31 @@ class UserService {
     try {
       const user = await User.findByPk(id);
       return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async blacklistToken(token) {
+    try {
+      const blacklistedToken = await BlacklistedToken.create({
+        token,
+        blacklistedAt: new Date(),
+      });
+      return blacklistedToken;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findBlacklistedToken(token) {
+    try {
+      const blacklistedToken = await BlacklistedToken.findOne({
+        where: {
+          token,
+        },
+      });
+      return blacklistedToken;
     } catch (error) {
       throw error;
     }
