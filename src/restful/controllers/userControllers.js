@@ -103,7 +103,7 @@ export default class UserControllers {
       // Check if user is accessing their own projects
       if (user.id === userId || user.role === "admin") {
         const projects = await userExist.getProjects({
-          attributes: ["name", "description", "startDate", "endDate"],
+          attributes: ["id", "name", "description", "startDate", "endDate"],
           through: {
             attributes: [],
           },
