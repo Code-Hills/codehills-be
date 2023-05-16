@@ -12,7 +12,7 @@ export default class ReviewControllers {
       const { revieweeId, description, ratings } = req.body;
       const user = await UserService.findUserById(revieweeId);
       if (!user) {
-        return Response.error(res, 400, {
+        return Response.error(res, 404, {
           message: "User not found",
         });
       }

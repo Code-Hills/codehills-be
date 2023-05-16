@@ -1,22 +1,21 @@
 import UserService from "../../services/userService";
+import projectService from "../../services/projectService";
 
 export async function reviewerType(revieweeId, reviewerId) {
   try {
-    // const {reviewerId, revieweeId} = req.body;
-    let type = "";
     const user = await UserService.findUserById(reviewerId);
     if (user.id === revieweeId) {
-      type = "self review";
+      return "self review";
     } else {
-      if (user.type != "manage") {
-        type = "peer review";
-      } else if (user.type === "manage") {
-        type = "manager review";
+      const project = await projectService.findProject({
+        projectLeadId: reviewerId,
+      });
+      if (project) {
+        return "manager review";
       }
+      return "peer review";
     }
-    return type;
   } catch (error) {
-    console.log("errorrr---", error);
     return false;
   }
 }

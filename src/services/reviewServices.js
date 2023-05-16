@@ -1,5 +1,5 @@
 import db from "./../database";
-const { Review } = db;
+const { Review, User } = db;
 
 export default class ReviewService {
   /**
@@ -9,49 +9,43 @@ export default class ReviewService {
    */
 
   static async create(param) {
-    try {
       const review = await Review.create(param);
       return review;
-    } catch (error) {
-      throw error;
-    }
   }
 
   static async findONE(param) {
-    try {
       const Reviews = await Review.findOne({
         where: param,
       });
       return Reviews;
-    } catch (error) {
-      throw error;
-    }
   }
 
   static async findAll() {
-    try {
-      const Reviews = await Review.findAll();
+      const Reviews = await Review.findAll({
+        include: [
+          {
+            model: User,
+            as: "reviewer",
+            attributes: ["displayName", "email", "role"],
+          },
+          {
+            model: User,
+            as: "reviewee",
+            attributes: ["displayName", "email", "role"],
+          },
+        ],
+      });
       return Reviews;
-    } catch (error) {
-      throw error;
-    }
   }
 
   static async findById(id) {
-    try {
       const Review = await Review.findByPk(id);
       return Review;
-    } catch (error) {
-      throw error;
-    }
   }
 
   static async delete(id) {
-    try {
       const review = await Review.destroy(id);
       return review;
-    } catch (error) {
-      throw error;
-    }
   }
+  
 }
