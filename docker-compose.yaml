@@ -14,18 +14,16 @@ services:
       context: .
       dockerfile: Dockerfile
     expose:
-      - ${PORT}
+      - 5000
     ports:
-      - '${PORT}:${PORT}'
+      - '5000:5000'
     restart: always
     depends_on:
       - db
-    # env_file:
-    #   - .env
     environment:
       HOST: ${HOST}
-      NODE_ENV: ${NODE_ENV}
-      PORT: ${PORT}
+      NODE_ENV: production
+      PORT: 5000 # Set the value for PORT directly in docker-compose.yml
       API_VERSION: ${API_VERSION}
       FRONTEND_URL: ${FRONTEND_URL}
       JWT_SECRET: ${JWT_SECRET}
