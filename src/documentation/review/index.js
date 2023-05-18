@@ -104,6 +104,113 @@ const reviews = {
       responses,
     },
   },
+
+  "/users/reviewers": {
+    post: {
+      tags: ["Reviews"],
+      summary: "Select a peer reviewer",
+      description: "You can not select more than two reviewers",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          name: "body",
+          in: "body",
+          description: "The ID of the reviewer to select",
+          required: true,
+          schema: {
+            example: {
+              reviewerId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+            },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
+  "/users/{developerId}/reviewers": {
+    get: {
+      tags: ["Reviews"],
+      summary: "Get all reviewers for a developer",
+      description: "Get all reviewers for a developer.",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          in: "path",
+          name: "developerId",
+          required: true,
+          schema: {
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
+  "/users/{developerId}/reviewers/approve": {
+    patch: {
+      tags: ["Reviews"],
+      summary: "Approve a reviewer",
+      description: "Only project lead/architect can approve/reject reviewers",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          in: "path",
+          name: "developerId",
+          required: true,
+          schema: {
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+        {
+          in: "body",
+          name: "body",
+          required: true,
+          schema: {
+            example: {
+              reviewerId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+            },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
+  "/users/{developerId}/reviewers/reject": {
+    patch: {
+      tags: ["Reviews"],
+      summary: "Reject a reviewer",
+      description: "Only project lead/architect can approve/reject reviewers",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          in: "path",
+          name: "developerId",
+          required: true,
+          schema: {
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+        {
+          in: "body",
+          name: "body",
+          required: true,
+          schema: {
+            example: {
+              reviewerId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+            },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
 };
 
 export default reviews;

@@ -72,4 +72,141 @@ export default class ReviewControllers {
         });
       });
   }
+
+  static async selectPeerReviewers(req, res) {
+    try {
+      const developerId = req.user.id;
+      const { reviewerId } = req.body;
+
+      const existingReviewers = await ReviewService.findAllReviewers(
+        developerId
+      );
+
+      if (existingReviewers?.length >= 2) {
+        return Response.error(res, 400, {
+          message: "You can not select more than two peer reviewers",
+        });
+      }
+
+      const reviewer = await UserService.findUserById(reviewerId);
+      if (!reviewer || !reviewer.isActivated) {
+        return res.status(404).json({ error: "Reviewer not found!" });
+      }
+
+      const alreadyReviewer = await ReviewService.findReviewer(
+        reviewerId,
+        developerId
+      );
+
+      if (alreadyReviewer) {
+        return Response.error(res, 400, {
+          message: "You have already selected this reviewer",
+        });
+      }
+
+      await ReviewService.addReviewer({ developerId, reviewerId });
+
+      return Response.success(res, 200, {
+        message: "Reviewer selected successfully",
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.error(res, 500, {
+        message: "Server error",
+        error: error.message,
+      });
+    }
+  }
+
+  static async getPeerReviewers(req, res) {
+    try {
+      const { developerId } = req.params;
+      const developer = await UserService.findUserById(developerId);
+      if (!developer) {
+        return res.status(404).json({ error: "developer not found" });
+      }
+      const reviewers = await ReviewService.getReviewers(developerId);
+
+      res.status(200).json({
+        message: `Retrieved All reviewers`,
+        reviewers: reviewers,
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.error(res, 500, {
+        message: "Server error",
+        error: error.message,
+      });
+    }
+  }
+
+  static async approveReviewer(req, res) {
+    try {
+      const architect = req.user;
+      if (architect?.role !== "architect") {
+        return Response.error(res, 403, {
+          message: "Only project lead or architect can approve reviewers",
+        });
+      }
+
+      const { developerId } = req.params;
+      const { reviewerId } = req.body;
+      const reviewer = await ReviewService.findReviewer(
+        reviewerId,
+        developerId
+      );
+      if (!reviewer) {
+        return res
+          .status(404)
+          .json({ error: "Reviewer not found for this developer" });
+      }
+      reviewer.status = "approved";
+      await reviewer.save();
+      return res.status(200).json({
+        message: "Reviewer approved successfully",
+        reviewer: { reviewerId: reviewerId, status: reviewer.status },
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.error(res, 500, {
+        message: "Server error",
+        error: error.message,
+      });
+    }
+  }
+
+  static async rejectReviewer(req, res) {
+    try {
+      const architect = req.user;
+      if (architect?.role !== "architect") {
+        return Response.error(res, 403, {
+          message: "Only project lead or architect can reject reviewers",
+        });
+      }
+
+      const { developerId } = req.params;
+      const { reviewerId } = req.body;
+      const reviewer = await ReviewService.findReviewer(
+        reviewerId,
+        developerId
+      );
+      if (!reviewer) {
+        return res
+          .status(404)
+          .json({ error: "Reviewer not found for this developer" });
+      }
+      reviewer.status = "rejected";
+      await reviewer.save();
+      return res.status(200).json({
+        message: "Reviewer rejected successfully",
+        reviewer: { reviewerId: reviewerId, status: reviewer.status },
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.error(res, 500, {
+        message: "Server error",
+        error: error.message,
+      });
+    }
+  }
 }

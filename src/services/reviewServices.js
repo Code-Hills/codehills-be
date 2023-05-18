@@ -1,5 +1,6 @@
+/* eslint-disable no-useless-catch */
 import db from "./../database";
-const { Review, User } = db;
+const { Review, Reviewer, User } = db;
 
 export default class ReviewService {
   /**
@@ -46,5 +47,57 @@ export default class ReviewService {
   static async delete(id) {
     const review = await Review.destroy(id);
     return review;
+  }
+
+  static async findReviewer(reviewerId, developerId) {
+    try {
+      const reviewer = await Reviewer.findOne({
+        where: {
+          reviewerId: reviewerId,
+          developerId: developerId,
+        },
+      });
+      return reviewer;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findAllReviewers(developerId) {
+    try {
+      const reviewers = await Reviewer.findAll({
+        where: {
+          developerId: developerId,
+        },
+      });
+      return reviewers;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async addReviewer(param) {
+    try {
+      const reviewer = await Reviewer.create(param);
+      return reviewer;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getReviewers(developerId) {
+    const reviewers = await Reviewer.findAll({
+      where: { developerId },
+      attributes: ["status"],
+      include: [
+        {
+          model: User,
+          as: "reviewer",
+          attributes: ["id", "firstName", "lastName", "email", "role"],
+        },
+      ],
+    });
+
+    return reviewers;
   }
 }

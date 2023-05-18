@@ -39,7 +39,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can create projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -58,7 +60,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can view all projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -135,7 +139,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -214,7 +220,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -238,7 +246,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -261,7 +271,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can delete projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -291,7 +303,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can update projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -307,7 +321,9 @@ export default class projectController {
         .json({ message: "Project retrieved successfully", project });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -382,7 +398,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 }

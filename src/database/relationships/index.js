@@ -37,4 +37,14 @@ export const associate = () => {
     foreignKey: "reviewCycleId",
     as: "reviewCycle",
   });
+
+  DB.Reviewer.belongsTo(DB.User, {
+    as: "developer",
+    foreignKey: "developerId",
+  });
+
+  DB.Reviewer.belongsTo(DB.User, {
+    as: "reviewer",
+    foreignKey: "reviewerId",
+  });
 };
