@@ -5,6 +5,7 @@ import UserProject from "./models/userProject";
 import NotificationModel from "./models/notification";
 import BlacklistedTokenModel from "./models/blacklistedToken";
 import ReviewModel from "./models/review";
+import ReviewCycleModel from "./models/reviewCycle";
 
 const DB = {
   sequelize, // connection instance (RAW queries)
@@ -14,6 +15,7 @@ const DB = {
   Notification: NotificationModel(sequelize),
   BlacklistedToken: BlacklistedTokenModel(sequelize),
   Review: ReviewModel(sequelize),
+  ReviewCycle: ReviewCycleModel(sequelize),
 };
 
 export default DB;

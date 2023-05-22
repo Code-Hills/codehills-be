@@ -15,6 +15,7 @@ const reviews = {
           schema: {
             example: {
               revieweeId: "5e5bb69e-26fe-4e61-b4f3-e9a9332066da",
+              reviewCycleId: "5e5bb69e-26fe-4e61-b4f3-e9a9332066da",
               description: "review description",
               ratings: 2,
             },
