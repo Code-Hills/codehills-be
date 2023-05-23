@@ -4,16 +4,23 @@ import Response from "../../system/helpers/Response";
 import { reviewerType } from "../../system/utils/riviewerType";
 import ReviewService from "../../services/reviewServices";
 import UserService from "../../services/userService";
+import ReviewCycleService from "../../services/reviewCycleServices";
 
 export default class ReviewControllers {
   static async create(req, res) {
     try {
       const { id: reviewerId } = req.user;
-      const { revieweeId, description, ratings } = req.body;
+      const { revieweeId, description, ratings, reviewCycleId } = req.body;
       const user = await UserService.findUserById(revieweeId);
+      const reviewCycle = await ReviewCycleService.findById(reviewCycleId);
       if (!user) {
         return Response.error(res, 404, {
           message: "User not found",
+        });
+      }
+      if (!reviewCycle) {
+        return Response.error(res, 404, {
+          message: "Review Cycle not found",
         });
       }
       const type = await reviewerType(revieweeId, reviewerId);
@@ -24,6 +31,7 @@ export default class ReviewControllers {
         description,
         type,
         ratingz,
+        reviewCycleId,
       })
         .then((review) => {
           return Response.success(res, 200, {
