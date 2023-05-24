@@ -13,7 +13,7 @@ router.post(
 );
 router.get("/", protect, ReviewCycleControllors.getALl);
 router.get("/:id", protect, ReviewCycleControllors.getOne);
-router.patch(
+router.put(
   "/:id",
   allowedRole(["admin"]),
   protect,

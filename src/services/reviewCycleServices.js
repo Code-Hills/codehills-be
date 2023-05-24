@@ -33,4 +33,14 @@ export default class ReviewCycleService {
     const review = await ReviewCycle.destroy(id);
     return review;
   }
+
+  static async update(payload, condition) {
+    const [rowCount] = await ReviewCycle.update(
+      {
+        ...payload,
+      },
+      condition
+    );
+    return rowCount;
+  }
 }

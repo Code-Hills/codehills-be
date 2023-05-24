@@ -23,9 +23,9 @@ export default class ReviewControllers {
           message: "Review Cycle not found",
         });
       }
-      if (reviewCycle?.status == false) {
+      if (reviewCycle?.active == false) {
         return Response.error(res, 401, {
-          message: "Unable to make review on this review cycle",
+          message: "This review cycle is closed",
         });
       }
       const type = await reviewerType(revieweeId, reviewerId);

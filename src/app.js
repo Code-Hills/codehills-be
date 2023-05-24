@@ -8,12 +8,13 @@ import router from "./restful/routes/index";
 import fileUploader from "express-fileupload";
 import { associate } from "./database/relationships";
 import { passport } from "./restful/routes/authRouters";
+import cronJob from "./system/utils/cronjob";
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 
 const app = express();
-
+cronJob();
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(express.json());

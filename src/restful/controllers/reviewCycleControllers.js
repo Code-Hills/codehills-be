@@ -1,5 +1,6 @@
 import Response from "../../system/helpers/Response";
 import ReviewCycleService from "../../services/reviewCycleServices";
+import { Op } from "sequelize";
 
 export default class ReviewCycleControllors {
   static async create(req, res) {
@@ -55,19 +56,16 @@ export default class ReviewCycleControllors {
   static async getOne(req, res) {
     try {
       const { id } = req.params;
-      ReviewCycleService.findById(id)
-        .then((reviewCycle) => {
-          return Response.success(res, 200, {
-            message: "reviewCycle retreived successfully",
-            data: reviewCycle,
-          });
-        })
-        .catch((error) => {
-          return Response.error(res, 403, {
-            message: "reviewCycle failed to be retreived",
-            error: error.message,
-          });
+      const reviewCycle = await ReviewCycleService.findById(id);
+      if (!reviewCycle) {
+        return Response.error(res, 400, {
+          message: "There is not this review cycle",
         });
+      }
+      return Response.success(res, 200, {
+        message: "reviewCycle retreived successfully",
+        data: reviewCycle,
+      });
     } catch (error) {
       return Response.error(res, 500, {
         message: "server error",
@@ -85,7 +83,7 @@ export default class ReviewCycleControllors {
           message: "Unable to find this review cycle",
         });
       }
-      reviewCycle.set("status", true);
+      reviewCycle.set("active", true);
       await reviewCycle.save();
       return Response.success(res, 200, {
         message: "Review cycle is now started",
@@ -108,7 +106,7 @@ export default class ReviewCycleControllors {
           message: "Unable to find this review cycle",
         });
       }
-      reviewCycle.set("status", false);
+      reviewCycle.set("active", false);
       await reviewCycle.save();
       return Response.success(res, 200, {
         message: "Review cycle is now ended",
@@ -166,6 +164,21 @@ export default class ReviewCycleControllors {
             error: error.message,
           });
         });
+    } catch (error) {
+      return Response.error(res, 500, {
+        message: "server error",
+        error: error.message,
+      });
+    }
+  }
+
+  static async checkDeadLine(req, res) {
+    try {
+      const current_date = new Date();
+      await ReviewCycleService.update(
+        { active: false },
+        { where: { endDate: { [Op.lt]: current_date }, active: true } }
+      );
     } catch (error) {
       return Response.error(res, 500, {
         message: "server error",

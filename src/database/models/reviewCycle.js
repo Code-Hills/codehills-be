@@ -22,7 +22,7 @@ const ReviewCycleModel = () => {
         type: DataTypes.DATE,
         defaultValue: new Date(),
       },
-      status: {
+      active: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
