@@ -5,7 +5,12 @@ import allowedRole from "../middlewares/allowedRoles";
 
 const router = express.Router();
 
-router.post("/", protect, allowedRole(["developer", "architect"]), ReviewControllers.create);
+router.post(
+  "/",
+  protect,
+  allowedRole(["developer", "architect"]),
+  ReviewControllers.create
+);
 router.get("/", protect, ReviewControllers.getAll);
 
 export default router;

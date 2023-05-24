@@ -23,10 +23,10 @@ export default class ReviewControllers {
           message: "Review Cycle not found",
         });
       }
-      if(reviewCycle?.status == false){
-        return Response.error(res,401,{
-          message:"Unable to make review on this review cycle"
-        })
+      if (reviewCycle?.status == false) {
+        return Response.error(res, 401, {
+          message: "Unable to make review on this review cycle",
+        });
       }
       const type = await reviewerType(revieweeId, reviewerId);
       let ratingz = type === "manager review" ? Number(ratings) : null;
