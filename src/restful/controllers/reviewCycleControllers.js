@@ -4,10 +4,10 @@ import ReviewCycleService from "../../services/reviewCycleServices";
 export default class ReviewCycleControllors {
   static async create(req, res) {
     try {
-      const { startAt, endingAt } = req.body;
+      const { startDate, endDate } = req.body;
       ReviewCycleService.create({
-        startAt,
-        endingAt,
+        startDate,
+        endDate,
       })
         .then((reviewCycle) => {
           return Response.success(res, 200, {
@@ -85,7 +85,7 @@ export default class ReviewCycleControllors {
           message: "Unable to find this review cycle",
         });
       }
-      reviewCycle.set("started", true);
+      reviewCycle.set("status", true);
       await reviewCycle.save();
       return Response.success(res, 200, {
         message: "Review cycle is now started",
@@ -108,7 +108,7 @@ export default class ReviewCycleControllors {
           message: "Unable to find this review cycle",
         });
       }
-      reviewCycle.set("ended", true);
+      reviewCycle.set("status", false);
       await reviewCycle.save();
       return Response.success(res, 200, {
         message: "Review cycle is now ended",

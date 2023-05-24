@@ -11,19 +11,15 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      startAt: {
+      startDate: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      endingAt: {
+      endDate: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      started: {
-        type: Sequelize.BOOLEAN,
-        default: false,
-      },
-      ended: {
+      status: {
         type: Sequelize.BOOLEAN,
         default: false,
       },

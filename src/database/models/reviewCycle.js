@@ -14,19 +14,15 @@ const ReviewCycleModel = () => {
         allowNull: false,
         unique: true,
       },
-      startAt: {
+      startDate: {
         type: DataTypes.DATE,
         defaultValue: new Date(),
       },
-      endingAt: {
+      endDate: {
         type: DataTypes.DATE,
         defaultValue: new Date(),
       },
-      started: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      ended: {
+      status: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },

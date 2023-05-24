@@ -14,8 +14,8 @@ const reviewCycles = {
           required: true,
           schema: {
             example: {
-              startAt: "2023-09-23",
-              endingAt: "2023-12-31",
+              startDate: "2023-09-23",
+              endDate: "2023-12-31",
             },
           },
         },
@@ -54,7 +54,7 @@ const reviewCycles = {
       consumes: ["application/json"],
       responses,
     },
-    patch: {
+    put: {
       tags: ["ReviewCycles"],
       summary: "Update a review",
       description:
@@ -75,8 +75,8 @@ const reviewCycles = {
           required: true,
           schema: {
             example: {
-              startAt: "2023-09-20",
-              endingAt: "2024-01-15",
+              startDate: "2023-09-20",
+              endDate: "2024-01-15",
             },
           },
         },
