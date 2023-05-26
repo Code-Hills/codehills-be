@@ -28,6 +28,13 @@ const reviewerModel = () => {
           key: "id",
         },
       },
+      reviewCycleId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "tbl_review_cycles",
+          key: "id",
+        },
+      },
       status: {
         type: DataTypes.ENUM("pending", "approved", "rejected"),
         defaultValue: "pending",

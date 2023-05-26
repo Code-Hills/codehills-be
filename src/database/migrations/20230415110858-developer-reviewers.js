@@ -25,6 +25,10 @@ module.exports = {
           key: "id",
         },
       },
+      reviewCycleId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+      },
       status: {
         type: Sequelize.ENUM("pending", "approved", "rejected"),
         defaultValue: "pending",

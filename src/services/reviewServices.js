@@ -49,12 +49,13 @@ export default class ReviewService {
     return review;
   }
 
-  static async findReviewer(reviewerId, developerId) {
+  static async findReviewer(reviewerId, developerId, reviewCycleId) {
     try {
       const reviewer = await Reviewer.findOne({
         where: {
           reviewerId: reviewerId,
           developerId: developerId,
+          reviewCycleId,
         },
       });
       return reviewer;
@@ -63,11 +64,12 @@ export default class ReviewService {
     }
   }
 
-  static async findAllReviewers(developerId) {
+  static async findAllReviewers(developerId, reviewCycleId) {
     try {
       const reviewers = await Reviewer.findAll({
         where: {
           developerId: developerId,
+          reviewCycleId: reviewCycleId,
         },
       });
       return reviewers;
@@ -85,9 +87,9 @@ export default class ReviewService {
     }
   }
 
-  static async getReviewers(developerId) {
+  static async getReviewers(developerId, reviewCycleId) {
     const reviewers = await Reviewer.findAll({
-      where: { developerId },
+      where: { developerId, reviewCycleId },
       attributes: ["status"],
       include: [
         {

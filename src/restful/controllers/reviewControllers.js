@@ -11,6 +11,19 @@ export default class ReviewControllers {
     try {
       const { id: reviewerId } = req.user;
       const { revieweeId, description, ratings, reviewCycleId } = req.body;
+
+      const selectedReviewer = await ReviewService.findReviewer(
+        reviewerId,
+        revieweeId,
+        reviewCycleId
+      );
+
+      if (req.user.role === "developer" && !selectedReviewer) {
+        return Response.error(res, 400, {
+          message: "You have not been selected to give a review",
+        });
+      }
+
       const user = await UserService.findUserById(revieweeId);
       const reviewCycle = await ReviewCycleService.findById(reviewCycleId);
       if (!user) {
@@ -75,27 +88,56 @@ export default class ReviewControllers {
 
   static async selectPeerReviewers(req, res) {
     try {
+      const { reviewCycleId, reviewerId } = req.body;
+
+      const reviewCycle = await ReviewCycleService.findById(reviewCycleId);
+      if (!reviewCycle) {
+        return Response.error(res, 404, {
+          message: "Review Cycle not found",
+        });
+      }
+      if (reviewCycle?.active == false) {
+        return Response.error(res, 401, {
+          message: "This review cycle is not active",
+        });
+      }
+
       const developerId = req.user.id;
-      const { reviewerId } = req.body;
 
       const existingReviewers = await ReviewService.findAllReviewers(
-        developerId
+        developerId,
+        reviewCycleId
       );
+
+      if (developerId === reviewerId) {
+        return Response.error(res, 400, {
+          message: "You can not select yourself as a reviewer",
+        });
+      }
 
       if (existingReviewers?.length >= 2) {
         return Response.error(res, 400, {
-          message: "You can not select more than two peer reviewers",
+          message: "You can not select more than two peer-reviewers",
         });
       }
 
       const reviewer = await UserService.findUserById(reviewerId);
       if (!reviewer || !reviewer.isActivated) {
-        return res.status(404).json({ error: "Reviewer not found!" });
+        return Response.error(res, 404, {
+          message: "Reviewer not found!",
+        });
+      }
+
+      if (reviewer.role !== "developer") {
+        return Response.error(res, 400, {
+          message: "Only select developers for peer-reviews",
+        });
       }
 
       const alreadyReviewer = await ReviewService.findReviewer(
         reviewerId,
-        developerId
+        developerId,
+        reviewCycleId
       );
 
       if (alreadyReviewer) {
@@ -120,15 +162,23 @@ export default class ReviewControllers {
 
   static async getPeerReviewers(req, res) {
     try {
-      const { developerId } = req.params;
+      const { developerId, reviewCycleId } = req.params;
       const developer = await UserService.findUserById(developerId);
       if (!developer) {
         return res.status(404).json({ error: "developer not found" });
       }
+
+      const reviewCycle = await ReviewCycleService.findById(reviewCycleId);
+      if (!reviewCycle) {
+        return Response.error(res, 404, {
+          message: "Review Cycle not found",
+        });
+      }
+
       const reviewers = await ReviewService.getReviewers(developerId);
 
       res.status(200).json({
-        message: `Retrieved All reviewers`,
+        message: `Retrieved All peer-reviewers for the selected cycle`,
         reviewers: reviewers,
       });
     } catch (error) {
@@ -150,10 +200,11 @@ export default class ReviewControllers {
       }
 
       const { developerId } = req.params;
-      const { reviewerId } = req.body;
+      const { reviewerId, reviewCycleId } = req.body;
       const reviewer = await ReviewService.findReviewer(
         reviewerId,
-        developerId
+        developerId,
+        reviewCycleId
       );
       if (!reviewer) {
         return res
@@ -185,10 +236,11 @@ export default class ReviewControllers {
       }
 
       const { developerId } = req.params;
-      const { reviewerId } = req.body;
+      const { reviewerId, reviewCycleId } = req.body;
       const reviewer = await ReviewService.findReviewer(
         reviewerId,
-        developerId
+        developerId,
+        reviewCycleId
       );
       if (!reviewer) {
         return res
