@@ -120,6 +120,7 @@ const reviews = {
           schema: {
             example: {
               reviewerId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+              reviewCycleId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
             },
           },
         },
@@ -129,7 +130,7 @@ const reviews = {
     },
   },
 
-  "/users/{developerId}/reviewers": {
+  "/users/{developerId}/reviewers/{reviewCyleId}": {
     get: {
       tags: ["Reviews"],
       summary: "Get all reviewers for a developer",
@@ -138,15 +139,25 @@ const reviews = {
       parameters: [
         {
           in: "path",
+          name: "reviewCyleId",
+          required: true,
+          schema: {
+            type: "string",
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+        {
+          in: "path",
           name: "developerId",
           required: true,
           schema: {
+            type: "string",
             example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
           },
         },
       ],
       consumes: ["application/json"],
-      responses,
+      responses: {},
     },
   },
 
@@ -172,6 +183,7 @@ const reviews = {
           schema: {
             example: {
               reviewerId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+              reviewCycleId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
             },
           },
         },
@@ -203,6 +215,7 @@ const reviews = {
           schema: {
             example: {
               reviewerId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+              reviewCycleId: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
             },
           },
         },

@@ -18,9 +18,25 @@ export default class ReviewControllers {
         reviewCycleId
       );
 
-      if (req.user.role === "developer" && !selectedReviewer) {
+      if (
+        req.user.role === "developer" &&
+        reviewerId !== reviewerId &&
+        !selectedReviewer
+      ) {
         return Response.error(res, 400, {
           message: "You have not been selected to give a review",
+        });
+      }
+
+      if (selectedReviewer?.status === "pending") {
+        return Response.error(res, 400, {
+          message: "You have not been approved yet",
+        });
+      }
+
+      if (selectedReviewer?.status === "rejected") {
+        return Response.error(res, 400, {
+          message: "You have been rejected",
         });
       }
 
@@ -146,7 +162,11 @@ export default class ReviewControllers {
         });
       }
 
-      await ReviewService.addReviewer({ developerId, reviewerId });
+      await ReviewService.addReviewer({
+        developerId,
+        reviewerId,
+        reviewCycleId,
+      });
 
       return Response.success(res, 200, {
         message: "Reviewer selected successfully",
@@ -175,7 +195,10 @@ export default class ReviewControllers {
         });
       }
 
-      const reviewers = await ReviewService.getReviewers(developerId);
+      const reviewers = await ReviewService.getReviewers(
+        developerId,
+        reviewCycleId
+      );
 
       res.status(200).json({
         message: `Retrieved All peer-reviewers for the selected cycle`,

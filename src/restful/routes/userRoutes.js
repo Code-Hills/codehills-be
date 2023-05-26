@@ -14,7 +14,7 @@ router.patch("/activate", protect, UserControllers.activateUser);
 router.patch("/roles", protect, UserControllers.assignRoles);
 router.get("/:userId/projects", protect, UserControllers.getUserProjects);
 router.post("/reviewers", protect, ReviewControllers.selectPeerReviewers);
-router.get("/:reviewCyleId/:developerId/reviewers", protect, getPeerReviewers);
+router.get("/:developerId/reviewers/:reviewCycleId", protect, getPeerReviewers);
 router.patch("/:developerId/reviewers/approve", protect, approveReviewer);
 router.patch("/:developerId/reviewers/reject", protect, rejectReviewer);
 
