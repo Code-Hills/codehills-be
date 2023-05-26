@@ -20,7 +20,7 @@ export default class ReviewControllers {
 
       if (
         req.user.role === "developer" &&
-        reviewerId !== reviewerId &&
+        revieweeId !== reviewerId &&
         !selectedReviewer
       ) {
         return Response.error(res, 400, {
