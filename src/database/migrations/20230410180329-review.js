@@ -33,6 +33,10 @@ module.exports = {
           key: "id",
         },
       },
+      reviewCycleId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+      },
       type: {
         type: Sequelize.STRING,
       },

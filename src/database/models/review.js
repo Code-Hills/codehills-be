@@ -34,6 +34,13 @@ const ReviewModel = () => {
           key: "id",
         },
       },
+      reviewCycleId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "tbl_review_cycles",
+          key: "id",
+        },
+      },
       type: {
         type: DataTypes.STRING,
         // allowNull: false
