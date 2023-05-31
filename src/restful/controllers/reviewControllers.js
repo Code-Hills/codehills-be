@@ -180,6 +180,41 @@ export default class ReviewControllers {
     }
   }
 
+  static async getReviews(req, res) {
+    try {
+      const { developerId, reviewCycleId } = req.params;
+      const developer = await UserService.findUserById(developerId);
+      if (!developer) {
+        return Response.error(res, 404, {
+          message: "developer not found",
+        });
+      }
+
+      const reviewCycle = await ReviewCycleService.findById(reviewCycleId);
+      if (!reviewCycle) {
+        return Response.error(res, 404, {
+          message: "Review Cycle not found",
+        });
+      }
+
+      const reviews = await ReviewService.getReviews(
+        developerId,
+        reviewCycleId
+      );
+
+      res.status(200).json({
+        message: `Retrieved All reviews given to the developer for the selected cycle`,
+        reviews: reviews,
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.error(res, 500, {
+        message: "Server error",
+        error: error.message,
+      });
+    }
+  }
+
   static async getPeerReviewers(req, res) {
     try {
       const { developerId, reviewCycleId } = req.params;

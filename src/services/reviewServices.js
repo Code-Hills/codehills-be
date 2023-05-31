@@ -102,4 +102,20 @@ export default class ReviewService {
 
     return reviewers;
   }
+
+  static async getReviews(revieweeId, reviewCycleId) {
+    const reviews = await Review.findAll({
+      where: { revieweeId, reviewCycleId },
+      attributes: ["id", "description", "ratingz"],
+      include: [
+        {
+          model: User,
+          as: "reviewer",
+          attributes: ["id", "firstName", "lastName", "email", "role"],
+        },
+      ],
+    });
+
+    return reviews;
+  }
 }

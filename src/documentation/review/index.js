@@ -25,6 +25,7 @@ const reviews = {
       consumes: ["application/json"],
       responses,
     },
+
     get: {
       tags: ["Reviews"],
       summary: "Get all reviews",
@@ -34,6 +35,37 @@ const reviews = {
       parameters: [],
       consumes: ["application/json"],
       responses,
+    },
+  },
+
+  "/users/{developerId}/reviews/{reviewCyleId}": {
+    get: {
+      tags: ["Reviews"],
+      summary: "Get all reviews given to a developer",
+      description: "Get all reviews given to a developer",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          in: "path",
+          name: "reviewCyleId",
+          required: true,
+          schema: {
+            type: "string",
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+        {
+          in: "path",
+          name: "developerId",
+          required: true,
+          schema: {
+            type: "string",
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses: {},
     },
   },
 
