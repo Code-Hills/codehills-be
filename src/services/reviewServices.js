@@ -1,5 +1,6 @@
+/* eslint-disable no-useless-catch */
 import db from "./../database";
-const { Review, User } = db;
+const { Review, Reviewer, User } = db;
 
 export default class ReviewService {
   /**
@@ -46,5 +47,75 @@ export default class ReviewService {
   static async delete(id) {
     const review = await Review.destroy(id);
     return review;
+  }
+
+  static async findReviewer(reviewerId, developerId, reviewCycleId) {
+    try {
+      const reviewer = await Reviewer.findOne({
+        where: {
+          reviewerId: reviewerId,
+          developerId: developerId,
+          reviewCycleId,
+        },
+      });
+      return reviewer;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findAllReviewers(developerId, reviewCycleId) {
+    try {
+      const reviewers = await Reviewer.findAll({
+        where: {
+          developerId: developerId,
+          reviewCycleId: reviewCycleId,
+        },
+      });
+      return reviewers;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async addReviewer(param) {
+    try {
+      const reviewer = await Reviewer.create(param);
+      return reviewer;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getReviewers(developerId, reviewCycleId) {
+    const reviewers = await Reviewer.findAll({
+      where: { developerId, reviewCycleId },
+      attributes: ["status"],
+      include: [
+        {
+          model: User,
+          as: "reviewer",
+          attributes: ["id", "firstName", "lastName", "email", "role"],
+        },
+      ],
+    });
+
+    return reviewers;
+  }
+
+  static async getReviews(revieweeId, reviewCycleId) {
+    const reviews = await Review.findAll({
+      where: { revieweeId, reviewCycleId },
+      attributes: ["id", "description", "ratingz"],
+      include: [
+        {
+          model: User,
+          as: "reviewer",
+          attributes: ["id", "firstName", "lastName", "email", "role"],
+        },
+      ],
+    });
+
+    return reviews;
   }
 }

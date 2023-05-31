@@ -186,4 +186,19 @@ export default class ReviewCycleControllors {
       });
     }
   }
+
+  static async activateReviewCycle(req, res) {
+    try {
+      const current_date = new Date();
+      await ReviewCycleService.update(
+        { active: true },
+        { where: { startDate: { [Op.lte]: current_date }, active: false } }
+      );
+    } catch (error) {
+      return Response.error(res, 500, {
+        message: "Server error",
+        error: error.message,
+      });
+    }
+  }
 }

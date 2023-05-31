@@ -39,7 +39,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can create projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -58,7 +60,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can view all projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -94,10 +98,7 @@ export default class projectController {
         const userNotification = {
           title: "Added to the project!",
           description: `You have been added to the ${project.name} project`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: user.id,
         };
         await createNotification(userNotification);
@@ -105,18 +106,13 @@ export default class projectController {
           user.email,
           "Added to the project",
           `Hello ${user.name}, You have been added to the "${project.name}" project`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+          `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
 
         const adminNotification = {
           title: "Added to the project!",
           description: `You have added ${user.name} to the ${project.name} project`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: user.id,
         };
         await createNotification(adminNotification);
@@ -124,9 +120,7 @@ export default class projectController {
           admin.email,
           "Added a user to the project",
           `Hello admin, You have added ${user.name} to the ${project.name} project`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+          `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
         return res.status(200).json({ message: "User added to project" });
       }
@@ -135,7 +129,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -171,10 +167,7 @@ export default class projectController {
         const userNotification = {
           title: "Removed from the project!",
           description: `You have been removed from the ${project.name} project`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: user.id,
         };
         await createNotification(userNotification);
@@ -182,18 +175,13 @@ export default class projectController {
           user.email,
           "Removed from the project!",
           `Hello ${user.name}, You have been removed from the "${project.name}" project`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+          `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
 
         const adminNotification = {
           title: "Removed from the project!",
           description: `You have removed ${user.name} from the ${project.name} project`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`,
+          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: user.id,
         };
         await createNotification(adminNotification);
@@ -201,9 +189,7 @@ export default class projectController {
           admin.email,
           "Removed a user from the project",
           `Hello admin, You have removed ${user.name} from the ${project.name} project`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${user.id}/projects`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${user.id}/projects`
+          `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
         return res
           .status(200)
@@ -214,7 +200,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -238,7 +226,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -261,7 +251,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can delete projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -291,7 +283,9 @@ export default class projectController {
         .json({ message: "Not Authorized! Only admin can update projects" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -307,7 +301,9 @@ export default class projectController {
         .json({ message: "Project retrieved successfully", project });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 
@@ -345,7 +341,7 @@ export default class projectController {
         const leadNotification = {
           title: "Added to the project as lead!",
           description: `You have been added to the project "${project.name}" as the project lead`,
-          url: `${req.protocol}://${req.get("host")}/projects/${project.id}`,
+          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: leadUser.id,
         };
         await createNotification(leadNotification);
@@ -353,15 +349,13 @@ export default class projectController {
           leadUser.email,
           "Added to the project as lead!",
           `Hello ${leadUser.displayName}, You have been added to the project "${project.name}" as the project lead.`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${leadUser.id}/projects`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${leadUser.id}/projects`
+          `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
 
         const adminNotification = {
           title: "Project lead updated",
           description: `You have updated the project lead for "${project.name}" to "${leadUser.displayName}"`,
-          url: `${req.protocol}://${req.get("host")}/projects/${project.id}`,
+          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: admin.id,
         };
         await createNotification(adminNotification);
@@ -369,9 +363,7 @@ export default class projectController {
           admin.email,
           "Project lead updated!",
           `Hello admin, You have added "${leadUser.displayName}" as the project lead for "${project.name}" project.`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${leadUser.id}/projects`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${leadUser.id}/projects`
+          `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
         return res
           .status(200)
@@ -382,7 +374,9 @@ export default class projectController {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "Server error" });
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
     }
   }
 }

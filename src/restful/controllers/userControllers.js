@@ -71,10 +71,7 @@ export default class UserControllers {
         const userNotification = {
           title: "Assigned new role!",
           description: `Your role have been updated to "${role}"`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          url: `${process.env.FRONTEND_URL}/users/${userExist.id}`,
           userId: userExist.id,
         };
         await createNotification(userNotification);
@@ -154,10 +151,7 @@ export default class UserControllers {
         const userNotification = {
           title: "Account deactivated!",
           description: `Your codehills account have been deactivated`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          url: `${process.env.FRONTEND_URL}/users/${userExist.id}`,
           userId: userExist.id,
         };
         await createNotification(userNotification);
@@ -166,18 +160,13 @@ export default class UserControllers {
           userExist.email,
           "Codehills account deactivated!",
           `Hello ${userExist.displayName}, Your codehills account have been deactivated`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+          `${process.env.FRONTEND_URL}/users/${userExist.id}`
         );
 
         const adminNotification = {
           title: "Account deactivated!",
           description: `You have deactivated ${userExist.displayName}'s account`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          url: `${process.env.FRONTEND_URL}/users/${userExist.id}`,
           userId: admin.id,
         };
         await createNotification(adminNotification);
@@ -185,9 +174,7 @@ export default class UserControllers {
           admin.email,
           "Codehills account deactivated!",
           `Hello admin, You have deactivated ${userExist.displayName}'s codehills account`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+          `${process.env.FRONTEND_URL}/users/${userExist.id}`
         );
         return res.status(200).json({
           message: "User deactivated successfully!",
@@ -227,10 +214,7 @@ export default class UserControllers {
         const userNotification = {
           title: "Account activated!",
           description: `Your codehills account have been activated`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          url: `${process.env.FRONTEND_URL}/users/${userExist.id}`,
           userId: userExist.id,
         };
         await createNotification(userNotification);
@@ -239,18 +223,13 @@ export default class UserControllers {
           userExist.email,
           "Codehills account activated!",
           `Hello ${userExist.displayName}, Your codehills account have been activated`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+          `${process.env.FRONTEND_URL}/users/${userExist.id}`
         );
 
         const adminNotification = {
           title: "Account activated!",
           description: `You have activated ${userExist.displayName}'s account`,
-          url:
-            process.env.NODE_ENV === "production"
-              ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-              : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`,
+          url: `${process.env.FRONTEND_URL}/users/${userExist.id}`,
           userId: admin.id,
         };
         await createNotification(adminNotification);
@@ -259,9 +238,7 @@ export default class UserControllers {
           admin.email,
           "Codehills account activated!",
           `Hello admin, You have activated ${userExist.displayName}'s codehills account`,
-          process.env.NODE_ENV === "production"
-            ? `${req.protocol}://${req.hostname}/api/v1/users/${userExist.id}`
-            : `${req.protocol}://${req.hostname}:${process.env.PORT}/api/v1/users/${userExist.id}`
+          `${process.env.FRONTEND_URL}/users/${userExist.id}`
         );
 
         return res

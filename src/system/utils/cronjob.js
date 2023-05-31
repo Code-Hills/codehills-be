@@ -6,6 +6,7 @@ const cronJob = () => {
     "0 00 * * *",
     function () {
       ReviewCycleControllors.checkDeadLine();
+      ReviewCycleControllors.activateReviewCycle();
     },
     () => {
       console.log("Now server stoped");
