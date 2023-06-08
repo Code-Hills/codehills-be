@@ -5,8 +5,14 @@ import projectService from "../../services/projectService";
 import UserService from "../../services/userService";
 const { UserProject } = db;
 
-const { createProject, findAllProjects, findProjectById, findUserProject } =
-  projectService;
+const {
+  createProject,
+  findAllProjects,
+  findProjectById,
+  findUserProject,
+  getUserProjectRecords,
+  deleteUserProjectRecords,
+} = projectService;
 
 const { findOneUser } = UserService;
 const { createNotification } = notificationService;
@@ -241,6 +247,14 @@ export default class projectController {
         if (!project) {
           return res.status(404).json({ error: "Project not found" });
         }
+
+        const userProjectRecords = await getUserProjectRecords(projectId);
+
+        if (userProjectRecords.length > 0) {
+          // First Delete all userProject records where projectId
+          await deleteUserProjectRecords(projectId);
+        }
+
         await project.destroy();
         return res
           .status(200)
