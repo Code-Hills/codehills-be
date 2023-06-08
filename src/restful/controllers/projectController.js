@@ -220,7 +220,15 @@ export default class projectController {
         return res.status(404).json({ error: "Project not found" });
       }
       const users = await project.getUsers({
-        attributes: ["id", "firstName", "lastName", "email", "role"],
+        attributes: [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "role",
+          "avatar",
+          "displayName",
+        ],
         through: {
           attributes: [],
         },
