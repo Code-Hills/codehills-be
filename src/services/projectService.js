@@ -69,4 +69,27 @@ export default class projectService {
       throw error;
     }
   }
+
+  static async getUserProjectRecords(projectId) {
+    try {
+      const userProjects = await UserProject.findAll({
+        where: {
+          projectId: projectId,
+        },
+      });
+
+      return userProjects;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async deleteUserProjectRecords(projectId) {
+    // Delete all userProject records where projectId
+    await UserProject.destroy({
+      where: {
+        projectId: projectId,
+      },
+    });
+  }
 }
