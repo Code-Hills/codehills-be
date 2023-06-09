@@ -203,7 +203,7 @@ export default class ReviewControllers {
       );
 
       res.status(200).json({
-        message: `Retrieved All reviews given to the developer for the selected cycle`,
+        message: `Successfully retrieved developer reviews for the selected cycle`,
         reviews: reviews,
       });
     } catch (error) {

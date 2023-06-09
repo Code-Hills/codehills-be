@@ -95,7 +95,15 @@ export default class ReviewService {
         {
           model: User,
           as: "reviewer",
-          attributes: ["id", "firstName", "lastName", "email", "role"],
+          attributes: [
+            "id",
+            "firstName",
+            "lastName",
+            "email",
+            "role",
+            "displayName",
+            "avatar",
+          ],
         },
       ],
     });
@@ -103,19 +111,53 @@ export default class ReviewService {
     return reviewers;
   }
 
-  static async getReviews(revieweeId, reviewCycleId) {
-    const reviews = await Review.findAll({
-      where: { revieweeId, reviewCycleId },
-      attributes: ["id", "description", "ratingz"],
+  static async getReviews(developerId, reviewCycleId) {
+    const givenReviews = await Review.findAll({
+      where: {
+        reviewCycleId,
+        reviewerId: developerId,
+      },
+      attributes: ["id", "description", "ratingz", "type"],
       include: [
         {
           model: User,
-          as: "reviewer",
-          attributes: ["id", "firstName", "lastName", "email", "role"],
+          as: "reviewee",
+          attributes: [
+            "id",
+            "firstName",
+            "lastName",
+            "email",
+            "role",
+            "displayName",
+            "avatar",
+          ],
         },
       ],
     });
 
-    return reviews;
+    const receivedReviews = await Review.findAll({
+      where: {
+        reviewCycleId,
+        revieweeId: developerId,
+      },
+      attributes: ["id", "description", "ratingz", "type"],
+      include: [
+        {
+          model: User,
+          as: "reviewer",
+          attributes: [
+            "id",
+            "firstName",
+            "lastName",
+            "email",
+            "role",
+            "displayName",
+            "avatar",
+          ],
+        },
+      ],
+    });
+
+    return { givenReviews, receivedReviews };
   }
 }
