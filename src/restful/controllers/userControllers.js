@@ -331,8 +331,8 @@ export default class UserControllers {
 
   static async searchUsers(req, res) {
     try {
-      const { serchTerm, role } = req.query;
-      const users = await UserService.searchUsers(serchTerm, role);
+      const { searchTerm, role } = req.query;
+      const users = await UserService.searchUsers(searchTerm, role);
       return res.status(200).json({ message: "Users retrieved", users });
     } catch (error) {
       console.log(error);

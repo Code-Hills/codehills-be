@@ -9,7 +9,7 @@ const search = {
       parameters: [
         {
           in: "query",
-          name: "serchTerm",
+          name: "searchTerm",
           required: false,
           schema: {
             example: "",
