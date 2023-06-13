@@ -5,6 +5,7 @@ import auth from "./auth";
 import projects from "./projects";
 import reviews from "./review";
 import reviewCycles from "./reviewCycle";
+import search from "./search";
 
 const defaults = swaggerDoc.paths;
 
@@ -22,6 +23,7 @@ const paths = {
   ...projects,
   ...reviewCycles,
   ...reviews,
+  ...search,
 };
 
 const config = {

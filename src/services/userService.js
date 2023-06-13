@@ -126,6 +126,35 @@ class UserService {
       throw error;
     }
   }
+
+  static async searchUsers(searchTerm = "", role = "developer") {
+    try {
+      const users = await User.findAll({
+        where: {
+          [Op.or]: [
+            {
+              displayName: {
+                [Op.iLike]: `%${searchTerm}%`,
+              },
+            },
+            {
+              email: {
+                [Op.iLike]: `%${searchTerm}%`,
+              },
+            },
+          ],
+          role: {
+            [Op.eq]: role,
+          },
+        },
+        limit: 10,
+        attributes: ["id", "displayName", "email"],
+      });
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default UserService;

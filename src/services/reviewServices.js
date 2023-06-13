@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-catch */
+import { Op } from "sequelize";
 import db from "./../database";
 const { Review, Reviewer, User } = db;
 
@@ -89,21 +90,21 @@ export default class ReviewService {
 
   static async getReviewers(developerId, reviewCycleId) {
     const reviewers = await Reviewer.findAll({
-      where: { developerId, reviewCycleId },
-      attributes: ["status"],
+      where: {
+        [Op.or]: [{ reviewerId: developerId }, { developerId: developerId }],
+        reviewCycleId,
+      },
+      attributes: ["status", "developerId", "reviewerId", "id"],
       include: [
         {
           model: User,
           as: "reviewer",
-          attributes: [
-            "id",
-            "firstName",
-            "lastName",
-            "email",
-            "role",
-            "displayName",
-            "avatar",
-          ],
+          attributes: ["id", "firstName", "lastName", "email", "role"],
+        },
+        {
+          model: User,
+          as: "developer",
+          attributes: ["id", "firstName", "lastName", "email", "role"],
         },
       ],
     });

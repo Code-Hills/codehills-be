@@ -328,4 +328,15 @@ export default class UserControllers {
       return res.status(500).json({ message: "Server error" });
     }
   }
+
+  static async searchUsers(req, res) {
+    try {
+      const { serchTerm, role } = req.query;
+      const users = await UserService.searchUsers(serchTerm, role);
+      return res.status(200).json({ message: "Users retrieved", users });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  }
 }
