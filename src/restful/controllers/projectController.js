@@ -401,4 +401,40 @@ export default class projectController {
         .json({ message: "server error", error: error.message });
     }
   }
+
+  static async changeProjectStatus(req, res) {
+    const leadId = req.user?.id;
+    const { projectId } = req.params;
+    try {
+      const project = await findProjectById(projectId);
+      if (project && project.projectLeadId === leadId) {
+        const status = req.body.status;
+
+        const validStatus = ["pending", "in-progress", "completed"];
+        if (!validStatus.includes(status)) {
+          return res.status(400).json({ message: "Invalid status" });
+        }
+        await project.update({ status: status });
+        return res.status(200).json({
+          message: `Project status changed to ${status}`,
+        });
+      }
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      if (project.projectLeadId !== leadId) {
+        return res.status(401).json({
+          message:
+            "Not Authorized! Only project lead can change project status",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "server error", error: error.message });
+    }
+  }
 }
