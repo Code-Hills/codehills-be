@@ -37,6 +37,10 @@ const ProjectModel = () => {
       endDate: {
         type: DataTypes.DATE,
       },
+      status: {
+        type: DataTypes.ENUM("pending", "in-progress", "completed"),
+        defaultValue: "pending",
+      },
     },
     {
       sequelize,

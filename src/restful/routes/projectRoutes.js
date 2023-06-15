@@ -12,6 +12,7 @@ const {
   addUserToProject,
   removeUserFromProject,
   setProjectLead,
+  changeProjectStatus,
 } = projectController;
 
 const projectRouter = Router();
@@ -25,5 +26,6 @@ projectRouter.get("/:projectId/users", protect, getProjectUsers);
 projectRouter.put("/:projectId/users", protect, addUserToProject);
 projectRouter.delete("/:projectId/users", protect, removeUserFromProject);
 projectRouter.patch("/:projectId/lead", protect, setProjectLead);
+projectRouter.patch("/:projectId/status", protect, changeProjectStatus);
 
 export default projectRouter;

@@ -222,6 +222,69 @@ const projects = {
       responses,
     },
   },
+
+  patch: {
+    tags: ["Projects"],
+    summary: "Update a project",
+    description: "Update a project. Only admin users can update a project.",
+    security: [{ JWT: [] }],
+    parameters: [
+      {
+        in: "path",
+        name: "projectId",
+        required: true,
+        schema: {
+          example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+        },
+      },
+      {
+        in: "body",
+        name: "body",
+        required: true,
+        schema: {
+          example: {
+            name: "Project name",
+            description: "Project description",
+            startDate: "2023-03-09T13:33:43.076Z",
+            endDate: "2023-03-09T13:33:43.076Z",
+          },
+        },
+      },
+    ],
+    consumes: ["application/json"],
+    responses,
+  },
+
+  "/projects/{projectId}/status": {
+    patch: {
+      tags: ["Projects"],
+      summary: "Change project status",
+      description: "Change project status. Only the project lead can do that.",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          in: "path",
+          name: "projectId",
+          required: true,
+          schema: {
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+        {
+          in: "body",
+          name: "body",
+          required: true,
+          schema: {
+            example: {
+              status: "completed",
+            },
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
 };
 
 export default projects;
