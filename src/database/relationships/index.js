@@ -15,17 +15,25 @@ export const associate = () => {
   });
 
   DB.Project.hasMany(DB.UserProject, {
+    as: "userProjects",
     onDelete: "CASCADE",
     foreignKey: "projectId",
   });
-  DB.UserProject.belongsTo(DB.Project, { foreignKey: "projectId" });
+  DB.UserProject.belongsTo(DB.Project, {
+    as: "project",
+    foreignKey: "projectId",
+  });
 
   DB.User.hasMany(DB.UserProject, {
+    as: "userProjects",
     onDelete: "CASCADE",
     foreignKey: "userId",
   });
 
-  DB.UserProject.belongsTo(DB.User, { foreignKey: "userId" });
+  DB.UserProject.belongsTo(DB.User, {
+    as: "developer",
+    foreignKey: "userId",
+  });
 
   DB.User.hasMany(DB.Review, {
     foreignKey: "reviewerId",
