@@ -229,10 +229,14 @@ export default class ReviewControllers {
 
   static async getPeerReviewers(req, res) {
     try {
-      const { developerId, reviewCycleId } = req.params;
-      const developer = await UserService.findUserById(developerId);
-      if (!developer) {
-        return res.status(404).json({ error: "developer not found" });
+      const { developerId, status } = req.query;
+      const { reviewCycleId } = req.params;
+
+      if (developerId) {
+        const developer = await UserService.findUserById(developerId);
+        if (!developer) {
+          return res.status(404).json({ error: "developer not found" });
+        }
       }
 
       const reviewCycle = await ReviewCycleService.findById(reviewCycleId);
@@ -244,7 +248,8 @@ export default class ReviewControllers {
 
       const reviewers = await ReviewService.getReviewers(
         developerId,
-        reviewCycleId
+        reviewCycleId,
+        status
       );
 
       res.status(200).json({

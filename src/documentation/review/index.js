@@ -162,7 +162,7 @@ const reviews = {
     },
   },
 
-  "/users/{developerId}/reviewers/{reviewCyleId}": {
+  "/users/reviewers/{reviewCyleId}": {
     get: {
       tags: ["Reviews"],
       summary: "Get all reviewers for a developer",
@@ -170,17 +170,26 @@ const reviews = {
       security: [{ JWT: [] }],
       parameters: [
         {
-          in: "path",
-          name: "reviewCyleId",
-          required: true,
+          in: "query",
+          name: "developerId",
+          required: false,
           schema: {
             type: "string",
-            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+            example: "",
+          },
+        },
+        {
+          in: "query",
+          name: "status",
+          required: false,
+          schema: {
+            type: "string",
+            example: "approved",
           },
         },
         {
           in: "path",
-          name: "developerId",
+          name: "reviewCyleId",
           required: true,
           schema: {
             type: "string",
