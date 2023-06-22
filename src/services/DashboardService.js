@@ -4,6 +4,7 @@ export default class DashboardService {
   static getDashboard = async (user) => {
     const userId = user.id;
     const userRole = user.role;
+    console.log("userRole", userRole);
     const dashboard = {
       recentProjects: [],
       totalDevelopers: 0,
@@ -13,12 +14,18 @@ export default class DashboardService {
       totalReviewCycle: 0,
     };
 
-    const Project = userRole === "admin" ? DB.Project : DB.UserProject;
+    const isAdminOrArchitect = ["architect", "admin"].includes(userRole);
+
+    const Project = isAdminOrArchitect ? DB.Project : DB.UserProject;
 
     dashboard.recentProjects = await Project.findAll({
       order: [["createdAt", "DESC"]],
       limit: 5,
-      where: userRole === "admin" ? {} : { userId },
+      where: isAdminOrArchitect
+        ? userRole === "admin"
+          ? {}
+          : { projectLeadId: userId }
+        : { userId },
     });
 
     dashboard.totalDevelopers = await DB.User.count({
@@ -26,7 +33,11 @@ export default class DashboardService {
     });
 
     dashboard.totalProjects = await DB.Project.count({
-      where: userRole === "admin" ? {} : { userId },
+      where: isAdminOrArchitect
+        ? userRole === "admin"
+          ? {}
+          : { projectLeadId: userId }
+        : { userId },
     });
 
     dashboard.totalReceivedReviews = await DB.Review.count({
@@ -34,7 +45,7 @@ export default class DashboardService {
     });
 
     dashboard.totalReviews = await DB.Review.count({
-      where: userRole === "admin" ? {} : { reivewerId: userId },
+      where: userRole === "admin" ? {} : { reviewerId: userId },
     });
 
     dashboard.totalReviewCycle = await DB.ReviewCycle.count();
