@@ -79,6 +79,47 @@ export default class ReviewService {
     }
   }
 
+  static async getAllReviewers(reviewCycleId) {
+    try {
+      const reviewers = await Reviewer.findAll({
+        where: {
+          reviewCycleId: reviewCycleId,
+        },
+        include: [
+          {
+            model: db.User,
+            as: "developer",
+            attributes: [
+              "id",
+              "firstName",
+              "lastName",
+              "email",
+              "displayName",
+              "avatar",
+              "telephone",
+            ],
+          },
+          {
+            model: db.User,
+            as: "reviewer",
+            attributes: [
+              "id",
+              "firstName",
+              "lastName",
+              "email",
+              "displayName",
+              "avatar",
+              "telephone",
+            ],
+          },
+        ],
+      });
+      return reviewers;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async addReviewer(param) {
     try {
       const reviewer = await Reviewer.create(param);
