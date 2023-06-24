@@ -260,6 +260,32 @@ export default class ReviewControllers {
     }
   }
 
+  static async getAllReviewers(req, res) {
+    try {
+      const { reviewCycleId } = req.params;
+
+      const reviewCycle = await ReviewCycleService.findById(reviewCycleId);
+      if (!reviewCycle) {
+        return Response.error(res, 404, {
+          message: "Review Cycle not found",
+        });
+      }
+
+      const reviewers = await ReviewService.getAllReviewers(reviewCycleId);
+
+      res.status(200).json({
+        message: `Retrieved All reviewers for the selected cycle`,
+        reviewers: reviewers,
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.error(res, 500, {
+        message: "Server error",
+        error: error.message,
+      });
+    }
+  }
+
   static async approveReviewer(req, res) {
     try {
       const architect = req.user;

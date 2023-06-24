@@ -193,6 +193,28 @@ const reviews = {
     },
   },
 
+  "/reviews/{reviewCyleId}/reviewers/": {
+    get: {
+      tags: ["Reviews"],
+      summary: "Get all reviewers for the selected review cycle",
+      description: "Get all reviewers for the selected review cycle.",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          in: "path",
+          name: "reviewCyleId",
+          required: true,
+          schema: {
+            type: "string",
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses: {},
+    },
+  },
+
   "/users/{developerId}/reviewers/approve": {
     patch: {
       tags: ["Reviews"],
