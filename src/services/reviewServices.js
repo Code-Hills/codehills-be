@@ -146,7 +146,13 @@ export default class ReviewService {
 
     const reviewers = await Reviewer.findAll({
       where,
-      attributes: ["status", "developerId", "reviewerId", "id"],
+      attributes: [
+        "status",
+        "developerId",
+        "reviewerId",
+        "id",
+        "reviewCycleId",
+      ],
       include: [
         {
           model: User,
