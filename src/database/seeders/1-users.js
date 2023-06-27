@@ -56,6 +56,7 @@ module.exports = {
           telephone: "+250788884444",
           displayName: "Doe",
           role: "architect",
+          isActivated: true,
           avatar: "https://www.images.com/avatar-12ddee-213-csd",
           createdAt: new Date(),
           updatedAt: new Date(),

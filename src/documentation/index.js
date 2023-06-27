@@ -6,6 +6,7 @@ import projects from "./projects";
 import reviews from "./review";
 import reviewCycles from "./reviewCycle";
 import search from "./search";
+import dashboard from "./auth/dashboard";
 
 const defaults = swaggerDoc.paths;
 
@@ -19,6 +20,7 @@ const host =
 const paths = {
   ...defaults,
   ...auth,
+  ...dashboard,
   ...user,
   ...projects,
   ...reviewCycles,
