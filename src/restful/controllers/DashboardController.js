@@ -7,7 +7,6 @@ export default class DashboardController {
 
       res.status(200).json({ message: "Dashboard", data: dashboard });
     } catch (error) {
-      console.log(error);
       res.status(500).json({ message: error.message });
     }
   };
