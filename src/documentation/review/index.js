@@ -162,13 +162,31 @@ const reviews = {
     },
   },
 
-  "/users/{developerId}/reviewers/{reviewCyleId}": {
+  "/users/reviewers/{reviewCyleId}": {
     get: {
       tags: ["Reviews"],
       summary: "Get all reviewers for a developer",
       description: "Get all reviewers for a developer.",
       security: [{ JWT: [] }],
       parameters: [
+        {
+          in: "query",
+          name: "developerId",
+          required: false,
+          schema: {
+            type: "string",
+            example: "",
+          },
+        },
+        {
+          in: "query",
+          name: "status",
+          required: false,
+          schema: {
+            type: "string",
+            example: "approved",
+          },
+        },
         {
           in: "path",
           name: "reviewCyleId",
@@ -178,9 +196,22 @@ const reviews = {
             example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
           },
         },
+      ],
+      consumes: ["application/json"],
+      responses: {},
+    },
+  },
+
+  "/reviews/{reviewCyleId}/reviewers/": {
+    get: {
+      tags: ["Reviews"],
+      summary: "Get all reviewers for the selected review cycle",
+      description: "Get all reviewers for the selected review cycle.",
+      security: [{ JWT: [] }],
+      parameters: [
         {
           in: "path",
-          name: "developerId",
+          name: "reviewCyleId",
           required: true,
           schema: {
             type: "string",

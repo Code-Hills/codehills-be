@@ -129,12 +129,23 @@ export default class ReviewService {
     }
   }
 
-  static async getReviewers(developerId, reviewCycleId) {
-    const reviewers = await Reviewer.findAll({
-      where: {
+  static async getReviewers(developerId, reviewCycleId, status) {
+    let where = {
+      reviewCycleId,
+    };
+    if (status) {
+      where.status = status;
+    }
+
+    if (developerId) {
+      where = {
+        ...where,
         [Op.or]: [{ reviewerId: developerId }, { developerId: developerId }],
-        reviewCycleId,
-      },
+      };
+    }
+
+    const reviewers = await Reviewer.findAll({
+      where,
       attributes: ["status", "developerId", "reviewerId", "id"],
       include: [
         {
