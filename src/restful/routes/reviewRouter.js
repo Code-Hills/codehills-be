@@ -12,5 +12,6 @@ router.post(
   ReviewControllers.create
 );
 router.get("/", protect, ReviewControllers.getAll);
+router.get("/:reviewCycleId/reviewers", protect, allowedRole(["admin", "architect"]), ReviewControllers.getAllReviewers);
 
 export default router;
