@@ -1,10 +1,10 @@
+import { Op } from "sequelize";
 import DB from "../database";
 
 export default class DashboardService {
   static getDashboard = async (user) => {
     const userId = user.id;
     const userRole = user.role;
-    console.log("userRole", userRole);
     const dashboard = {
       recentProjects: [],
       totalDevelopers: 0,
@@ -14,30 +14,55 @@ export default class DashboardService {
       totalReviewCycle: 0,
     };
 
-    const isAdminOrArchitect = ["architect", "admin"].includes(userRole);
+    dashboard.totalProjects = await DB.UserProject.count({
+      where: { userId },
+    });
 
-    const Project = isAdminOrArchitect ? DB.Project : DB.UserProject;
-
-    dashboard.recentProjects = await Project.findAll({
+    const userProjects = await DB.UserProject.findAll({
       order: [["createdAt", "DESC"]],
       limit: 5,
-      where: isAdminOrArchitect
-        ? userRole === "admin"
-          ? {}
-          : { projectLeadId: userId }
-        : { userId },
+      where: { userId },
+      include: [
+        {
+          model: DB.Project,
+          as: "project",
+        },
+      ],
     });
+    dashboard.recentProjects = userProjects.map(
+      (userProject) => userProject.project
+    );
+
+    const userProjectIds = dashboard.recentProjects.map(
+      (project) => project.id
+    );
+
+    if (userRole === "admin") {
+      dashboard.recentProjects = await DB.Project.findAll({
+        order: [["createdAt", "DESC"]],
+        limit: 5,
+      });
+      dashboard.totalProjects = await DB.Project.count();
+    } else if (userRole === "architect") {
+      const where = {
+        projectLeadId: {
+          [Op.notIn]: userProjectIds,
+        },
+      };
+      const leadProjects = await DB.Project.findAll({
+        order: [["createdAt", "DESC"]],
+        limit: 5,
+        where,
+      });
+      dashboard.recentProjects = [
+        ...dashboard.recentProjects,
+        ...leadProjects,
+      ].slice(0, 5);
+      dashboard.totalProjects += await DB.Project.count({ where });
+    }
 
     dashboard.totalDevelopers = await DB.User.count({
       where: { role: "developer" },
-    });
-
-    dashboard.totalProjects = await DB.Project.count({
-      where: isAdminOrArchitect
-        ? userRole === "admin"
-          ? {}
-          : { projectLeadId: userId }
-        : { userId },
     });
 
     dashboard.totalReceivedReviews = await DB.Review.count({
