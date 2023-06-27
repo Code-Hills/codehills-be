@@ -57,7 +57,19 @@ export default class ReviewControllers {
           message: "This review cycle is closed",
         });
       }
+
       const type = await reviewerType(revieweeId, reviewerId);
+      const reviewMade = await ReviewService.findONE({
+        reviewerId,
+        revieweeId,
+        reviewCycleId,
+        type,
+      });
+      if (reviewMade) {
+        return Response.error(res, 401, {
+          message: "review have been made",
+        });
+      }
       let ratingz = type === "manager review" ? Number(ratings) : null;
       ReviewService.create({
         revieweeId,
