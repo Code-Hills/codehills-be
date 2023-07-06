@@ -15,8 +15,8 @@ router.get("/", protect, ReviewCycleControllors.getALl);
 router.get("/:id", protect, ReviewCycleControllors.getOne);
 router.put(
   "/:id",
-  allowedRole(["admin"]),
   protect,
+  allowedRole(["admin"]),
   ReviewCycleControllors.update
 );
 router.delete(
