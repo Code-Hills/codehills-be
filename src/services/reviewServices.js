@@ -146,7 +146,13 @@ export default class ReviewService {
 
     const reviewers = await Reviewer.findAll({
       where,
-      attributes: ["status", "developerId", "reviewerId", "id"],
+      attributes: [
+        "status",
+        "developerId",
+        "reviewerId",
+        "id",
+        "reviewCycleId",
+      ],
       include: [
         {
           model: User,
@@ -212,5 +218,20 @@ export default class ReviewService {
     });
 
     return { givenReviews, receivedReviews };
+  }
+
+  static async deleteReviewer(param) {
+    try {
+      const reviewer = await Reviewer.findOne({
+        where: param,
+      });
+      if (!reviewer) {
+        throw new Error("Reviewer not found");
+      }
+      await reviewer.destroy();
+      return reviewer;
+    } catch (error) {
+      throw error;
+    }
   }
 }

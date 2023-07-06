@@ -162,6 +162,27 @@ const reviews = {
     },
   },
 
+  "/users/reviewers/{reviewerId}": {
+    delete: {
+      tags: ["Reviews"],
+      summary: "Delete my peer reviewer",
+      security: [{ JWT: [] }],
+      parameters: [
+        {
+          name: "reviewerId",
+          in: "path",
+          description: "The ID of the reviewer to delete",
+          required: true,
+          schema: {
+            example: "8a2a4287-fd47-45f9-a1a0-42e24aeeeddz",
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
   "/users/reviewers/{reviewCyleId}": {
     get: {
       tags: ["Reviews"],

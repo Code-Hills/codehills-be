@@ -19,5 +19,10 @@ router.get("/reviewers/:reviewCycleId", protect, getPeerReviewers);
 router.get("/:developerId/reviews/:reviewCycleId", protect, getReviews);
 router.patch("/:developerId/reviewers/approve", protect, approveReviewer);
 router.patch("/:developerId/reviewers/reject", protect, rejectReviewer);
+router.delete(
+  "/reviewers/:reviewerId",
+  protect,
+  ReviewControllers.deleteMyReviewer
+);
 
 export default router;

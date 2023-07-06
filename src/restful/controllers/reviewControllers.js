@@ -362,4 +362,23 @@ export default class ReviewControllers {
       });
     }
   }
+
+  static async deleteMyReviewer(req, res) {
+    try {
+      const developerId = req.user.id;
+      const { reviewerId } = req.params;
+      await ReviewService.deleteReviewer({
+        reviewerId,
+        developerId,
+      });
+      return res.status(200).json({
+        message: "Reviewer deleted successfully",
+      });
+    } catch (error) {
+      console.log(error);
+      return Response.error(res, 500, {
+        message: error.message || "Server error",
+      });
+    }
+  }
 }
