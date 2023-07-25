@@ -40,7 +40,7 @@ export default class DashboardService {
     if (userRole === "admin") {
       dashboard.recentProjects = await DB.Project.findAll({
         order: [["createdAt", "DESC"]],
-        limit: 5,
+        // limit: 5,
       });
       dashboard.totalProjects = await DB.Project.count();
     } else if (userRole === "architect") {
@@ -51,13 +51,23 @@ export default class DashboardService {
       };
       const leadProjects = await DB.Project.findAll({
         order: [["createdAt", "DESC"]],
-        limit: 5,
+        // limit: 5,
         where,
       });
+
+      // remove duplicates
       dashboard.recentProjects = [
         ...dashboard.recentProjects,
         ...leadProjects,
-      ].slice(0, 5);
+      ].reduce((acc, current) => {
+        const x = acc.find((item) => item.id === current.id);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []);
+
       dashboard.totalProjects += await DB.Project.count({ where });
     }
 
