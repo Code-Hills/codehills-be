@@ -9,7 +9,7 @@ module.exports = {
         default: Sequelize.UUIDV4,
       },
       microsoftId: {
-        type: Sequelize.UUID,
+        type: Sequelize.STRING,
       },
       firstName: {
         type: Sequelize.STRING,

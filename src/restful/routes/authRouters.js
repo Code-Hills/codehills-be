@@ -15,6 +15,7 @@ passport.use(
       clientSecret: `${CLIENTSECRET}`,
       callbackURL: `${HOST}/api/v1/auth/microsoft/callback`,
       scope: ["user.read"],
+      // tenant: '',
     },
     async (req, accessToken, refreshToken, profile, done) => {
       // Your code here
