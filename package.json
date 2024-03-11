@@ -50,6 +50,7 @@
     "pg": "^8.9.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.29.0",
+    "source-map": "^0.7.4",
     "swagger-ui-express": "^4.6.1"
   },
   "devDependencies": {

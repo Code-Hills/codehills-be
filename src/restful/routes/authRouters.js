@@ -15,8 +15,13 @@ passport.use(
       clientSecret: `${CLIENTSECRET}`,
       callbackURL: `${HOST}/api/v1/auth/microsoft/callback`,
       scope: ["user.read"],
+      // tenant: '',
     },
     async (req, accessToken, refreshToken, profile, done) => {
+      console.log("profile++++++", profile);
+      console.log("accesT+++++", accessToken);
+      console.log("RefreshT+++++", refreshToken);
+
       // Your code here
       const user = {
         microsoftId: profile.id,
