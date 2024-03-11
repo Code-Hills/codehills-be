@@ -23,7 +23,6 @@ class AuthController {
   static async loginCallback(req, res) {
     try {
       req.user.role = "developer";
-      console.log("req.user++++++++++++++", req.user);
       req.user.email = req.user?.email?.toLowerCase();
       const user = await UserService.findOrCreateUser(req.user);
 
@@ -31,7 +30,6 @@ class AuthController {
       const token = jwt.sign(createdUser, JWT_SECRET, {
         expiresIn: EXPIRES_IN,
       });
-      console.log("tokenFront++++++++++++++", token);
       const apiResponse = {
         status: 200,
         message: "Successfully logged in",
@@ -42,7 +40,6 @@ class AuthController {
         `${FRONTEND_URL}/login?code=${responseBuffer.toString("base64")}`
       );
     } catch (error) {
-      console.log("error++++++++++++++", error);
       if (error.name === "SequelizeValidationError") {
         const apiResponse = {
           status: 422,

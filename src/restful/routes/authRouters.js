@@ -18,10 +18,6 @@ passport.use(
       // tenant: '',
     },
     async (req, accessToken, refreshToken, profile, done) => {
-      console.log("profile++++++", profile);
-      console.log("accesT+++++", accessToken);
-      console.log("RefreshT+++++", refreshToken);
-
       // Your code here
       const user = {
         microsoftId: profile.id,
