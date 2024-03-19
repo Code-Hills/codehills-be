@@ -60,6 +60,16 @@ export default class projectService {
     }
   }
 
+  static async  findUserAllProject(userId) {
+    try {
+      const userProjects = await UserProject.findAll({ where: { userId: userId } });
+      return userProjects.map(userProject => userProject.projectId);
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+
   static async getProjectLead(id) {
     try {
       const project = await Project.findByPk(id);

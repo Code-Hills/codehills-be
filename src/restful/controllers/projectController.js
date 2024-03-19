@@ -3,10 +3,11 @@ import sendEmail from "../../services/emailService";
 import notificationService from "../../services/notificationService";
 import projectService from "../../services/projectService";
 import UserService from "../../services/userService";
-const { UserProject } = db;
+const { Project, UserProject } = db;
 
 const {
   createProject,
+  findUserAllProject,
   findAllProjects,
   findProjectById,
   findUserProject,
@@ -54,21 +55,39 @@ export default class projectController {
   static async getAllProjects(req, res) {
     try {
       const user = req.user;
-      if (user && user.role === "admin") {
+      if (!user) {
+        return res.status(401).json({ message: "Not Authorized!" });
+      }
+
+      if (user.role === "admin") {
         const projects = await findAllProjects();
         return res.status(200).json({
           message: "All projects retrieved successfully!",
           projects: projects,
         });
+      } else if (user.role === "developer") {
+        const projectIds = await findUserAllProject(req.user.id);
+        const projects = await Project.findAll({ where: { id: projectIds } });
+        return res.status(200).json({
+          message: "Assigned projects retrieved successfully!",
+          projects: projects,
+        });
+      } else if (user.role === "architect") {
+        const projects = await Project.findAll({
+          where: { projectLeadId: req.user.id },
+        });
+        return res.status(200).json({
+          message: "Lead projects retrieved successfully!",
+          projects: projects,
+        });
+      } else {
+        return res.status(401).json({ message: "You are not  Authorized!" });
       }
-      return res
-        .status(401)
-        .json({ message: "Not Authorized! Only admin can view all projects" });
     } catch (error) {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "server error", error: error.message });
+        .json({ message: "Server error", error: error.message });
     }
   }
 
@@ -99,7 +118,6 @@ export default class projectController {
             .status(400)
             .json({ error: "User is already assigned to this project" });
         }
-
         await project.addUsers(user);
         const userNotification = {
           title: "Added to the project!",
@@ -111,13 +129,13 @@ export default class projectController {
         await sendEmail(
           user.email,
           "Added to the project",
-          `Hello ${user.name}, You have been added to the "${project.name}" project`,
+          `Hello ${user.firstName}, You have been added to the "${project.name}" project`,
           `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
 
         const adminNotification = {
           title: "Added to the project!",
-          description: `You have added ${user.name} to the ${project.name} project`,
+          description: `You have added ${user.firstName} to the ${project.name} project`,
           url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: user.id,
         };
@@ -125,7 +143,7 @@ export default class projectController {
         await sendEmail(
           admin.email,
           "Added a user to the project",
-          `Hello admin, You have added ${user.name} to the ${project.name} project`,
+          `Hello admin, You have added ${user.firstName} to the ${project.name} project`,
           `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
         return res.status(200).json({ message: "User added to project" });
@@ -180,13 +198,13 @@ export default class projectController {
         await sendEmail(
           user.email,
           "Removed from the project!",
-          `Hello ${user.name}, You have been removed from the "${project.name}" project`,
+          `Hello ${user.firstName}, You have been removed from the "${project.name}" project`,
           `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
 
         const adminNotification = {
           title: "Removed from the project!",
-          description: `You have removed ${user.name} from the ${project.name} project`,
+          description: `You have removed ${user.firstName} from the ${project.name} project`,
           url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: user.id,
         };
@@ -194,7 +212,7 @@ export default class projectController {
         await sendEmail(
           admin.email,
           "Removed a user from the project",
-          `Hello admin, You have removed ${user.name} from the ${project.name} project`,
+          `Hello admin, You have removed ${user.firstName} from the ${project.name} project`,
           `${process.env.FRONTEND_URL}/projects/${project.id}`
         );
         return res
