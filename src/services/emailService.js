@@ -16,17 +16,22 @@ let transporter = nodemailer.createTransport({
 });
 
 export default async function sendEmail(to, subject, body, url) {
-  const html = await ejs.renderFile(
-    path.join(__dirname, "../views/email-template.ejs"),
-    { subject, body, url }
-  );
+  try {
+    const html = await ejs.renderFile(
+      path.join(__dirname, "../views/email-template.ejs"),
+      { subject, body, url }
+    );
 
-  let info = await transporter.sendMail({
-    from: SENDER_EMAIL,
-    to: to,
-    subject: subject,
-    html: html,
-  });
+    let info = await transporter.sendMail({
+      from: SENDER_EMAIL,
+      to: to,
+      subject: subject,
+      html: html,
+    });
 
-  console.log("Message sent: %s", info.messageId);
+    console.log("Message sent: %s", info.messageId);
+  } catch (error) {
+    console.error("Error sending email:", error);
+     throw Error(error)
+  }
 }

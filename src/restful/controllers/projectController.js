@@ -119,14 +119,18 @@ export default class projectController {
             .json({ error: "User is already assigned to this project" });
         }
         await project.addUsers(user);
+
+        //send emails and notifications to assigned users
+
         const userNotification = {
           title: "Added to the project!",
           description: `You have been added to the ${project.name} project`,
           url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
           userId: user.id,
         };
+
         await createNotification(userNotification);
-        await sendEmail(
+         sendEmail(
           user.email,
           "Added to the project",
           `Hello ${user.firstName}, You have been added to the "${project.name}" project`,
