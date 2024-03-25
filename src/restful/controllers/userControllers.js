@@ -258,51 +258,22 @@ export default class UserControllers {
     try {
       const { email } = req.user;
       const userExist = await UserService.findOneUser({ email });
-      if (!userExist) {
-        return Response.error(res, 404, {
-          message: "The user you are trying to update is not found!",
-        });
-      }
+
       let obj = req.body;
       let avatar = req?.files
         ? fileUploader(req?.files?.avatar).fileName
         : userExist?.avatar;
       obj.avatar = avatar;
 
-      obj.bank = req.body?.bank ? JSON.parse(obj.bank) : userExist?.bank;
-      obj.bank.accountName = req.body?.bank.accountName
-        ? obj.bank.accountName
-        : userExist?.bank.accountName;
-      obj.bank.BankName = req.body?.bank.BankName
-        ? obj.bank.BankName
-        : userExist?.bank.BankName;
-      obj.bank.SwiftCode = req.body?.bank.SwiftCode
-        ? obj.bank.SwiftCode
-        : userExist?.bank.SwiftCode;
-      obj.bank.Currency = req.body?.bank.Currency
-        ? obj.bank.Currency
-        : userExist?.bank.Currency;
+      const updateUser = await UserService.updateUser(
+        { ...req.body },
+        { email }
+      );
 
-      obj.address = req.body?.address
-        ? JSON.parse(obj.address)
-        : userExist?.address;
-      obj.address.country = req.body?.address?.country
-        ? obj.address?.country
-        : userExist?.address?.country;
-      obj.address.city = req.body?.address?.city
-        ? obj.address?.city
-        : userExist?.address?.city;
-      obj.address.street = req.body?.address?.street
-        ? obj.address?.street
-        : userExist?.address?.street;
-
-      await userExist.set(obj);
-      await userExist.save();
-
-      userExist.avatar = `${process.env.HOST}/uploads/${obj?.avatar}`;
+      updateUser.avatar = `${process.env.HOST}/uploads/${obj?.avatar}`;
       return Response.success(res, 200, {
         message: "profile updated successfully",
-        data: userExist,
+        data: updateUser,
       });
     } catch (error) {
       return Response.error(res, 500, {
