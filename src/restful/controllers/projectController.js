@@ -3,6 +3,7 @@ import sendEmail from "../../services/emailService";
 import notificationService from "../../services/notificationService";
 import projectService from "../../services/projectService";
 import UserService from "../../services/userService";
+import { eventEmit, knownEvents } from "../../system/utils/event.util";
 const { Project, UserProject } = db;
 
 const {
@@ -120,22 +121,10 @@ export default class projectController {
         }
         await project.addUsers(user);
 
-        //send emails and notifications to assigned users
-
-        const userNotification = {
-          title: "Added to the project!",
-          description: `You have been added to the ${project.name} project`,
-          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
-          userId: user.id,
-        };
-
-        await createNotification(userNotification);
-         sendEmail(
-          user.email,
-          "Added to the project",
-          `Hello ${user.firstName}, You have been added to the "${project.name}" project`,
-          `${process.env.FRONTEND_URL}/projects/${project.id}`
-        );
+        eventEmit(knownEvents.addUserToProject, {
+          user,
+          project,
+        });
 
         const adminNotification = {
           title: "Added to the project!",
@@ -144,7 +133,7 @@ export default class projectController {
           userId: user.id,
         };
         await createNotification(adminNotification);
-        await sendEmail(
+        sendEmail(
           admin.email,
           "Added a user to the project",
           `Hello admin, You have added ${user.firstName} to the ${project.name} project`,
@@ -382,19 +371,10 @@ export default class projectController {
 
         await project.update({ projectLeadId: leadUser.id });
 
-        const leadNotification = {
-          title: "Added to the project as lead!",
-          description: `You have been added to the project "${project.name}" as the project lead`,
-          url: `${process.env.FRONTEND_URL}/projects/${project.id}`,
-          userId: leadUser.id,
-        };
-        await createNotification(leadNotification);
-        await sendEmail(
-          leadUser.email,
-          "Added to the project as lead!",
-          `Hello ${leadUser.displayName}, You have been added to the project "${project.name}" as the project lead.`,
-          `${process.env.FRONTEND_URL}/projects/${project.id}`
-        );
+        eventEmit(knownEvents.addLeadToProject, {
+          leadUser,
+          project,
+        });
 
         const adminNotification = {
           title: "Project lead updated",
@@ -403,7 +383,7 @@ export default class projectController {
           userId: admin.id,
         };
         await createNotification(adminNotification);
-        await sendEmail(
+        sendEmail(
           admin.email,
           "Project lead updated!",
           `Hello admin, You have added "${leadUser.displayName}" as the project lead for "${project.name}" project.`,

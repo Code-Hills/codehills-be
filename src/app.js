@@ -8,6 +8,10 @@ import router from "./restful/routes/index";
 import fileUploader from "express-fileupload";
 import { associate } from "./database/relationships";
 import { passport } from "./restful/routes/authRouters";
+import {
+  listenToUserProjectAssigned,
+  listenToLeadProjectAssigned,
+} from "./system/utils/listenToEvent";
 import cronJob from "./system/utils/cronjob";
 dotenv.config();
 
