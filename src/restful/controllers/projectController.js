@@ -1,6 +1,6 @@
 import db from "../../database";
 import sendEmail from "../../services/emailService";
-import notificationService from "../../services/notificationService";
+import NotificationService from "../../services/notificationService";
 import projectService from "../../services/projectService";
 import UserService from "../../services/userService";
 import { eventEmit, knownEvents } from "../../system/utils/event.util";
@@ -17,7 +17,7 @@ const {
 } = projectService;
 
 const { findOneUser } = UserService;
-const { createNotification } = notificationService;
+const { createNotification } = NotificationService;
 
 export default class projectController {
   static async createProject(req, res) {
