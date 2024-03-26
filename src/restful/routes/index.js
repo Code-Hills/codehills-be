@@ -10,6 +10,7 @@ import reviewRouter from "./reviewRouter";
 import reviewCycleRouter from "./reviewCycleRoutes";
 import searchRouter from "./searchRouter";
 import dashboardRouter from "./dashboard";
+import notificationRouter from "./notificationRoutes";
 
 const API_VERSION = process.env.API_VERSION || "v1";
 const url = `/api/${API_VERSION}`;
@@ -25,6 +26,7 @@ router.use(`${url}/reviewCycles`, reviewCycleRouter);
 router.use("/uploads", uploadRoute);
 router.use(`${url}/search`, searchRouter);
 router.use(`${url}/dashboard`, dashboardRouter);
+router.use(`${url}/notification`, notificationRouter);
 
 router.all(`${url}/`, (req, res) => {
   return res.status(200).json({ message: "Welcome to codehills backend!" });

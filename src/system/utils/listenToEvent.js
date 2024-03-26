@@ -1,8 +1,8 @@
 import { knownEvents, subscribe } from "./event.util";
 import sendEmail from "../../services/emailService";
-import notificationService from "../../services/notificationService";
+import NotificationService from "../../services/notificationService";
 
-const { createNotification } = notificationService;
+const { createNotification } = NotificationService;
 
 export const listenToUserProjectAssigned = subscribe(
   knownEvents.addUserToProject,

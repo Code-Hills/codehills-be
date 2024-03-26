@@ -7,6 +7,7 @@ import reviews from "./review";
 import reviewCycles from "./reviewCycle";
 import search from "./search";
 import dashboard from "./auth/dashboard";
+import notification from "./notification";
 
 const defaults = swaggerDoc.paths;
 
@@ -26,6 +27,7 @@ const paths = {
   ...reviewCycles,
   ...reviews,
   ...search,
+  ...notification,
 };
 
 const config = {
