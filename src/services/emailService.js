@@ -1,19 +1,10 @@
-const nodemailer = require("nodemailer");
+import sgMail from "@sendgrid/mail";
 const ejs = require("ejs");
 const path = require("path");
-const { EMAIL_SERVICE, EMAIL_HOST, EMAIL_PORT, SENDER_EMAIL, EMAIL_PASSWORD } =
-  process.env;
 
-let transporter = nodemailer.createTransport({
-  service: EMAIL_SERVICE,
-  host: EMAIL_HOST,
-  port: EMAIL_PORT,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: SENDER_EMAIL,
-    pass: EMAIL_PASSWORD,
-  },
-});
+const { SEND_GRID_EMAIL, SENDGRID_API_KEY } = process.env;
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 export default async function sendEmail(to, subject, body, url) {
   try {
@@ -22,16 +13,28 @@ export default async function sendEmail(to, subject, body, url) {
       { subject, body, url }
     );
 
-    let info = await transporter.sendMail({
-      from: SENDER_EMAIL,
+    let message = {
       to: to,
+      from: {
+        name: "CODEHILLS HR APP",
+        email: SEND_GRID_EMAIL,
+      },
       subject: subject,
       html: html,
-    });
+    };
 
-    console.log("Message sent: %s", info.messageId);
+    return sgMail
+      .send(message)
+      .then((res) => {
+        console.log("email sent...");
+        return res;
+      })
+      .catch((error) => {
+        console.error(error.message);
+        throw error;
+      });
   } catch (error) {
-    console.error("Error sending email:", error);
-     throw Error(error)
+    console.error(error.message);
+    throw error;
   }
 }

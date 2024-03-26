@@ -77,4 +77,9 @@ export const associate = () => {
     as: "reviewCycle",
     foreignKey: "reviewCycleId",
   });
+  DB.Notification.belongsTo(DB.User, {
+    foreignKey: "userId",
+    as: "user",
+    onDelete: "CASCADE",
+  });
 };
