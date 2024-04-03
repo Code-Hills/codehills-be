@@ -3,7 +3,10 @@ import NotificationController from "../controllers/NotificationController";
 
 import protect from "../middlewares";
 import { validatePagination } from "../../validations/notification.validation";
-import { receivedPaginationFormat } from "../middlewares/notificationMiddleware";
+import {
+  checkIfHasNotificationId,
+  receivedPaginationFormat,
+} from "../middlewares/notificationMiddleware";
 
 const notificationRouter = express.Router();
 
@@ -15,4 +18,10 @@ notificationRouter.get(
   NotificationController.getNotifications
 );
 
+notificationRouter.patch(
+  "/:notificationId",
+  protect,
+  checkIfHasNotificationId,
+  NotificationController.markOneNotification
+);
 export default notificationRouter;

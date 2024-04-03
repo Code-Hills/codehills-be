@@ -20,6 +20,10 @@ export default class NotificationService {
     }
   }
 
+  static async updateNotifications(field, query) {
+    return await Notification.update(field, { where: query });
+  }
+
   static async getNotifications(query, limit, page) {
     const offset = (page - 1) * limit;
 

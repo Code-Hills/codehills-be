@@ -3,7 +3,7 @@ import responses from "../responses";
 const notification = {
   "/notification": {
     get: {
-      tags: ["Notification"],
+      tags: ["Notifications"],
       security: [{ JWT: [] }],
       summary: "get notifications",
       parameters: [
@@ -22,6 +22,28 @@ const notification = {
           description: "limit can be any positive number greater than 0",
           schema: {
             example: "",
+          },
+        },
+      ],
+      consumes: ["application/json"],
+      responses,
+    },
+  },
+
+  "/notification/{notificationId}": {
+    patch: {
+      tags: ["Notifications"],
+      security: [{ JWT: [] }],
+      summary: "Update User notifications",
+      parameters: [
+        {
+          name: "notificationId",
+          in: "path",
+          description: "Id of the notification to be updated",
+          required: true,
+          schema: {
+            type: "string",
+            format: "uuid",
           },
         },
       ],

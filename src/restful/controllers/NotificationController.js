@@ -19,4 +19,22 @@ export default class NotificationController {
       });
     }
   }
+
+  static async markOneNotification(req, res) {
+    try {
+      await NotificationService.updateNotifications(
+        { read: true },
+        { id: req.params.notificationId, userId: req.user.id }
+      );
+
+      return res
+        .status(200)
+        .json({ message: "Marked one notification as read" });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: "Failed to update the notification",
+      });
+    }
+  }
 }

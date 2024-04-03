@@ -1,6 +1,7 @@
 import { knownEvents, subscribe } from "./event.util";
 import sendEmail from "../../services/emailService";
 import NotificationService from "../../services/notificationService";
+import { knownSockets, SocketUtil } from "./SocketUtil";
 
 const { createNotification } = NotificationService;
 
@@ -18,7 +19,12 @@ export const listenToUserProjectAssigned = subscribe(
       userId: user.id,
     };
 
-    await createNotification(userNotification);
+    const notification = await createNotification(userNotification);
+
+    SocketUtil.socketEmit(
+      `${knownSockets.notification}.${user.id}`,
+      notification
+    );
 
     sendEmail(
       email,
@@ -42,7 +48,14 @@ export const listenToLeadProjectAssigned = subscribe(
       url: `${process.env.FRONTEND_URL}/projects/${projectId}`,
       userId: leadUserId,
     };
-    await createNotification(leadNotification);
+
+    const notification = await createNotification(leadNotification);
+
+    SocketUtil.socketEmit(
+      `${knownSockets.notification}.${leadUserId}`,
+      notification
+    );
+
     sendEmail(
       email,
       "Added to the project as lead!",
