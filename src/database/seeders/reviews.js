@@ -29,7 +29,9 @@ const reviews = [
 ];
 
 module.exports = {
-  up: (queryInterface) => queryInterface.bulkInsert("tbl_reviews", reviews, {}),
+  up: (queryInterface) =>
+    queryInterface.bulkInsert("tbl_overall_reviews", reviews, {}),
 
-  down: (queryInterface) => queryInterface.bulkDelete("tbl_reviews", null, {}),
+  down: (queryInterface) =>
+    queryInterface.bulkDelete("tbl_overall_reviews", null, {}),
 };

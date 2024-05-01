@@ -35,26 +35,28 @@ export const associate = () => {
     foreignKey: "userId",
   });
 
-  DB.User.hasMany(DB.Review, {
+  DB.User.hasMany(DB.OverallReview, {
     foreignKey: "reviewerId",
   });
-  DB.User.hasMany(DB.Review, {
+
+  DB.User.hasMany(DB.OverallReview, {
     foreignKey: "revieweeId",
   });
 
-  DB.Review.belongsTo(DB.User, {
+  DB.OverallReview.belongsTo(DB.User, {
     foreignKey: "reviewerId",
     as: "reviewer",
   });
-  DB.Review.belongsTo(DB.User, {
+  DB.OverallReview.belongsTo(DB.User, {
     foreignKey: "revieweeId",
     as: "reviewee",
   });
 
-  DB.ReviewCycle.hasMany(DB.Review, {
+  DB.ReviewCycle.hasMany(DB.OverallReview, {
     foreignKey: "reviewCycleId",
   });
-  DB.Review.belongsTo(DB.ReviewCycle, {
+
+  DB.OverallReview.belongsTo(DB.ReviewCycle, {
     foreignKey: "reviewCycleId",
     as: "reviewCycle",
   });
@@ -76,5 +78,26 @@ export const associate = () => {
   DB.Reviewer.belongsTo(DB.ReviewCycle, {
     as: "reviewCycle",
     foreignKey: "reviewCycleId",
+  });
+
+  DB.RatingCategory.hasMany(DB.RatingField, {
+    foreignKey: "categoryId",
+  });
+
+  DB.RatingField.belongsTo(DB.RatingCategory, {
+    foreignKey: "categoryId",
+  });
+
+  DB.OverallReview.hasMany(DB.FieldReview, {
+    foreignKey: "overallReviewId",
+  });
+
+  DB.FieldReview.belongsTo(DB.OverallReview, {
+    foreignKey: "overallReviewId",
+  });
+
+  DB.FieldReview.belongsTo(DB.RatingField, {
+    foreignKey: "ratingFieldId",
+    onDelete: "CASCADE",
   });
 };
