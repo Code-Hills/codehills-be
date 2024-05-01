@@ -2,10 +2,10 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/sequelize";
 
-class Review extends Model {}
+class OverallReview extends Model {}
 
-const ReviewModel = () => {
-  Review.init(
+const OverallReviewModel = () => {
+  OverallReview.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -14,10 +14,7 @@ const ReviewModel = () => {
         allowNull: false,
         unique: true,
       },
-      ratingz: {
-        type: DataTypes.INTEGER,
-      },
-      description: {
+      comment: {
         type: DataTypes.TEXT,
       },
       reviewerId: {
@@ -41,27 +38,23 @@ const ReviewModel = () => {
           key: "id",
         },
       },
+      isReviewd: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       type: {
         type: DataTypes.STRING,
-        // allowNull: false
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: new Date(),
       },
     },
     {
       sequelize,
-      modelName: "Review",
-      tableName: "tbl_reviews",
+      modelName: "OverallReview",
+      tableName: "tbl_overall_reviews",
+      timestamps: true,
     }
   );
 
-  return Review;
+  return OverallReview;
 };
 
-export default ReviewModel;
+export default OverallReviewModel;

@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-vars */
 "use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("tbl_reviews", {
+    await queryInterface.createTable("tbl_overall_reviews", {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -11,15 +10,11 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      ratingz: {
-        type: Sequelize.INTEGER,
-      },
-      description: {
+      comment: {
         type: Sequelize.TEXT,
       },
       reviewerId: {
         type: Sequelize.UUID,
-        allowNull: false,
         references: {
           model: "tbl_users",
           key: "id",
@@ -27,7 +22,6 @@ module.exports = {
       },
       revieweeId: {
         type: Sequelize.UUID,
-        allowNull: false,
         references: {
           model: "tbl_users",
           key: "id",
@@ -35,7 +29,14 @@ module.exports = {
       },
       reviewCycleId: {
         type: Sequelize.UUID,
-        allowNull: false,
+        references: {
+          model: "tbl_review_cycles",
+          key: "id",
+        },
+      },
+      isReviewd: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       type: {
         type: Sequelize.STRING,
@@ -51,7 +52,7 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("tbl_reviews");
+  down: async (queryInterface) => {
+    await queryInterface.dropTable("tbl_overall_reviews");
   },
 };
