@@ -32,6 +32,6 @@ export default async function sendEmail(to, subject, body, url) {
     console.log("Message sent: %s", info.messageId);
   } catch (error) {
     console.error("Error sending email:", error);
-     throw Error(error)
+    throw Error(error);
   }
 }

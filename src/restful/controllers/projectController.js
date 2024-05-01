@@ -130,7 +130,7 @@ export default class projectController {
         };
 
         await createNotification(userNotification);
-         sendEmail(
+        sendEmail(
           user.email,
           "Added to the project",
           `Hello ${user.firstName}, You have been added to the "${project.name}" project`,
