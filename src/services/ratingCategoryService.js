@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-catch */
 import DB from "./../database";
 import { Op } from "sequelize";
-const { RatingCategory } = DB;
+const { RatingCategory, RatingField } = DB;
 
 export default class RatingCategoryService {
   static async createRatingCategory(param) {
@@ -15,7 +15,14 @@ export default class RatingCategoryService {
 
   static async findAllRatingCategories() {
     try {
-      const ratingCategories = await RatingCategory.findAll();
+      const ratingCategories = await RatingCategory.findAll({
+        include: [
+          {
+            model: RatingField,
+            attributes: ["id", "name"],
+          },
+        ],
+      });
       return ratingCategories;
     } catch (error) {
       throw error;
@@ -39,7 +46,14 @@ export default class RatingCategoryService {
 
   static async findRatingCategoryById(id) {
     try {
-      const ratingCategory = await RatingCategory.findByPk(id);
+      const ratingCategory = await RatingCategory.findByPk(id, {
+        include: [
+          {
+            model: RatingField,
+            attributes: ["id", "name"],
+          },
+        ],
+      });
       return ratingCategory;
     } catch (error) {
       throw error;
