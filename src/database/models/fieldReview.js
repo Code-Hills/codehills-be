@@ -20,6 +20,13 @@ const FieldReviewModel = () => {
           key: "id",
         },
       },
+      overallReviewId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "tbl_overall_reviews",
+          key: "id",
+        },
+      },
       ratings: {
         type: DataTypes.INTEGER,
         allowNull: false,

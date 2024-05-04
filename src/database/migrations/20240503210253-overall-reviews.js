@@ -34,10 +34,6 @@ module.exports = {
           key: "id",
         },
       },
-      isReviewd: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
       type: {
         type: Sequelize.STRING,
       },

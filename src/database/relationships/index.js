@@ -82,13 +82,16 @@ export const associate = () => {
 
   DB.RatingCategory.hasMany(DB.RatingField, {
     foreignKey: "categoryId",
+    as: "ratingFields",
   });
 
   DB.RatingField.belongsTo(DB.RatingCategory, {
     foreignKey: "categoryId",
+    as: "ratingCategory",
   });
 
   DB.OverallReview.hasMany(DB.FieldReview, {
+    as: "fieldReviews",
     foreignKey: "overallReviewId",
   });
 
@@ -98,6 +101,7 @@ export const associate = () => {
 
   DB.FieldReview.belongsTo(DB.RatingField, {
     foreignKey: "ratingFieldId",
+    as: "ratingField",
     onDelete: "CASCADE",
   });
 };

@@ -1,8 +1,5 @@
 import Response from "../../system/helpers/Response";
 import ratingFieldService from "../../services/ratingFieldService";
-import * as v from "valibot";
-import { ratingFieldSchema } from "../../system/validators";
-import { filterValidationError } from "../../system/utils";
 
 const {
   createRatingField,
@@ -14,24 +11,15 @@ const {
 export default class RatingFieldController {
   static async createRatingField(req, res) {
     try {
-      const results = v.safeParse(ratingFieldSchema, req.body);
-      if (!results.success) {
-        return Response.error(res, 400, {
-          message: "Please correct your inputs",
-          errors: filterValidationError(results.issues),
-        });
-      }
+      const { name, categoryId } = req.body;
       // Check existance
-      const ratingFields = await checkRatingFieldExists(
-        results.output.name,
-        results.output.categoryId
-      );
+      const ratingFields = await checkRatingFieldExists(name, categoryId);
       if (ratingFields) {
         return Response.error(res, 409, {
           message: "Rating Field already exists in given category",
         });
       }
-      const createCategory = await createRatingField(results.output);
+      const createCategory = await createRatingField({ name, categoryId });
       return Response.success(res, 200, {
         message: "Rating Field created successfully",
         data: createCategory,

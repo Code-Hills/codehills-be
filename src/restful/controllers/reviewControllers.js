@@ -1,16 +1,62 @@
 /* eslint-disable no-constant-condition */
-/* eslint-disable no-useless-catch */
 import Response from "../../system/helpers/Response";
 import { reviewerType } from "../../system/utils/riviewerType";
 import ReviewService from "../../services/reviewServices";
 import UserService from "../../services/userService";
 import ReviewCycleService from "../../services/reviewCycleServices";
+import RatingFieldService from "../../services/ratingFieldService";
 
 export default class ReviewControllers {
   static async create(req, res) {
+    const { id: reviewerId } = req.user;
+
+    const {
+      revieweeId,
+      reviewCycleId,
+      fieldReviews: fieldReviewsData,
+    } = req.body;
+
+    // Checking if ratingFieldId is not in the array of field reviews more than once
+    const duplicatesExist = fieldReviewsData.filter((currentReview, index) =>
+      fieldReviewsData.some(
+        (otherReview, i) =>
+          otherReview.ratingFieldId === currentReview.ratingFieldId &&
+          i !== index
+      )
+    );
+    if (duplicatesExist.length > 0) {
+      return Response.error(res, 400, {
+        message: "You have duplicate ratingFieldIds in your field reviews",
+      });
+    }
+
     try {
-      const { id: reviewerId } = req.user;
-      const { revieweeId, description, ratings, reviewCycleId } = req.body;
+      const allRatingFields = await RatingFieldService.findAllRatingFields();
+
+      // if number of rating fields does not match with user provided rating fields
+      if (allRatingFields.length !== fieldReviewsData.length) {
+        return Response.error(res, 400, {
+          message: "Please provide all ratingFieldIds required for a review",
+        });
+      }
+
+      // check if user provided ratingFields that are not in the database
+      const misMatches = fieldReviewsData
+        .filter(
+          (fieldReview) =>
+            !allRatingFields.some(
+              (ratingField) => ratingField.id === fieldReview.ratingFieldId
+            )
+        )
+        .map((fieldReview) => fieldReview.ratingFieldId);
+
+      if (misMatches.length > 0) {
+        return Response.error(res, 400, {
+          message: `We ca't find these ratingFieldIds: ${misMatches.join(
+            ", "
+          )}`,
+        });
+      }
 
       const selectedReviewer = await ReviewService.findReviewer(
         reviewerId,
@@ -66,34 +112,28 @@ export default class ReviewControllers {
         type,
       });
       if (reviewMade) {
-        return Response.error(res, 401, {
-          message: "review have been made",
+        return Response.error(res, 409, {
+          message: "Review have been made",
         });
       }
-      let ratingz = type === "manager review" ? Number(ratings) : null;
-      ReviewService.create({
-        revieweeId,
-        reviewerId,
-        description,
+
+      const overallReview = await ReviewService.createReview({
+        ...req.body,
         type,
-        ratingz,
-        reviewCycleId,
-      })
-        .then((review) => {
-          return Response.success(res, 200, {
-            message: "review created successfully",
-            data: review,
-          });
-        })
-        .catch((error) => {
-          return Response.error(res, 403, {
-            message: "review failed to be created",
-            error: error.message,
-          });
-        });
+        reviewerId,
+      });
+      const { id } = overallReview;
+      const fieldReviews = await ReviewService.createFieldReviews(
+        fieldReviewsData,
+        id
+      );
+      return Response.success(res, 201, {
+        message: "Review created successfully",
+        data: { ...overallReview.dataValues, fieldReviews },
+      });
     } catch (error) {
       return Response.error(res, 500, {
-        message: "server error",
+        message: "Problem while creating review",
         error: error.message,
       });
     }

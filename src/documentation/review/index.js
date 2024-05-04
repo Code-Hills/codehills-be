@@ -5,7 +5,7 @@ const reviews = {
     post: {
       tags: ["Reviews"],
       summary: "Create new reviews",
-      description: "Create new reviews.",
+      description: "Create new review. use the schema below",
       security: [{ JWT: [] }],
       parameters: [
         {
@@ -14,10 +14,19 @@ const reviews = {
           required: true,
           schema: {
             example: {
+              comment: "review description",
               revieweeId: "5e5bb69e-26fe-4e61-b4f3-e9a9332066da",
               reviewCycleId: "5e5bb69e-26fe-4e61-b4f3-e9a9332066da",
-              description: "review description",
-              ratings: 2,
+              fieldReviews: [
+                {
+                  ratingFieldId: "5e5bb69e-26fe-4e61-b4f3-e9a9332066da",
+                  ratings: 2,
+                },
+                {
+                  ratingFieldId: "5e5bb69e-26fe-4e61-b4f3-e9a9332066da",
+                  ratings: 5,
+                },
+              ],
             },
           },
         },

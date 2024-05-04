@@ -38,10 +38,6 @@ const OverallReviewModel = () => {
           key: "id",
         },
       },
-      isReviewd: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
       type: {
         type: DataTypes.STRING,
       },

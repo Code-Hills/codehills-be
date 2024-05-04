@@ -19,6 +19,7 @@ export default class RatingCategoryService {
         include: [
           {
             model: RatingField,
+            as: "ratingFields",
             attributes: ["id", "name"],
           },
         ],
@@ -50,11 +51,24 @@ export default class RatingCategoryService {
         include: [
           {
             model: RatingField,
+            as: "ratingFields",
             attributes: ["id", "name"],
           },
         ],
       });
       return ratingCategory;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async updateRatingCategoryName(id, name) {
+    try {
+      const updatedCategory = await RatingCategory.update(
+        { name },
+        { where: { id }, returning: true }
+      );
+      return updatedCategory[1][0];
     } catch (error) {
       throw error;
     }

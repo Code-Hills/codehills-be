@@ -17,6 +17,13 @@ module.exports = {
           key: "id",
         },
       },
+      overallReviewId: {
+        type: Sequelize.UUID,
+        references: {
+          model: "tbl_overall_reviews",
+          key: "id",
+        },
+      },
       ratings: {
         type: Sequelize.INTEGER,
         allowNull: false,

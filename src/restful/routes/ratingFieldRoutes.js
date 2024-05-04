@@ -2,6 +2,8 @@ import { Router } from "express";
 import allowedRole from "../middlewares/allowedRoles";
 import ratingFieldController from "../controllers/ratingFieldController";
 import protect from "../middlewares";
+import { validateRequestBody } from "../middlewares/validateRequestBody";
+import { ratingFieldSchema } from "../../system/validators";
 
 const {
   createRatingField,
@@ -12,7 +14,13 @@ const {
 
 const ratingFieldRouter = Router();
 
-ratingFieldRouter.post("/", protect, allowedRole(["admin"]), createRatingField);
+ratingFieldRouter.post(
+  "/",
+  protect,
+  allowedRole(["admin"]),
+  validateRequestBody(ratingFieldSchema),
+  createRatingField
+);
 ratingFieldRouter.get(
   "/",
   protect,
