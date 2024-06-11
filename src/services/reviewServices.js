@@ -1,29 +1,48 @@
 /* eslint-disable no-useless-catch */
 import { Op } from "sequelize";
 import db from "./../database";
-const { Review, Reviewer, User } = db;
+const { OverallReview, Reviewer, User, FieldReview, RatingField } = db;
 
 export default class ReviewService {
-  /**
-   * Creates a new message.
-   * @param {object} param details of a message.
-   * @returns {object} users new message.
-   */
+  static async createReview(params) {
+    const { comment, reviewerId, revieweeId, reviewCycleId, type } = params;
+    try {
+      const overallReview = await OverallReview.create({
+        comment,
+        reviewerId,
+        revieweeId,
+        reviewCycleId,
+        type,
+      });
+      return overallReview;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-  static async create(param) {
-    const review = await Review.create(param);
-    return review;
+  static async createFieldReviews(params, overallReviewId) {
+    try {
+      const fieldReviews = await FieldReview.bulkCreate(
+        params.map((fieldReview) => ({
+          ...fieldReview,
+          overallReviewId,
+        }))
+      );
+      return fieldReviews;
+    } catch (error) {
+      throw error;
+    }
   }
 
   static async findONE(param) {
-    const Reviews = await Review.findOne({
+    const Reviews = await OverallReview.findOne({
       where: param,
     });
     return Reviews;
   }
 
   static async findAll() {
-    const Reviews = await Review.findAll({
+    const Reviews = await OverallReview.findAll({
       include: [
         {
           model: User,
@@ -35,18 +54,30 @@ export default class ReviewService {
           as: "reviewee",
           attributes: ["displayName", "email", "role"],
         },
+        {
+          model: FieldReview,
+          as: "fieldReviews",
+          attributes: ["id", "ratings"],
+          include: [
+            {
+              model: RatingField,
+              as: "ratingField",
+              attributes: ["name"],
+            },
+          ],
+        },
       ],
     });
     return Reviews;
   }
 
   static async findById(id) {
-    const Review = await Review.findByPk(id);
+    const Review = await OverallReview.findByPk(id);
     return Review;
   }
 
   static async delete(id) {
-    const review = await Review.destroy(id);
+    const review = await OverallReview.destroy(id);
     return review;
   }
 
@@ -171,7 +202,7 @@ export default class ReviewService {
   }
 
   static async getReviews(developerId, reviewCycleId) {
-    const givenReviews = await Review.findAll({
+    const givenReviews = await OverallReview.findAll({
       where: {
         reviewCycleId,
         reviewerId: developerId,
@@ -194,7 +225,7 @@ export default class ReviewService {
       ],
     });
 
-    const receivedReviews = await Review.findAll({
+    const receivedReviews = await OverallReview.findAll({
       where: {
         reviewCycleId,
         revieweeId: developerId,
