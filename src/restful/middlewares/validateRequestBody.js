@@ -1,6 +1,6 @@
 import * as v from "valibot";
-import { filterValidationError } from "../../system/utils";
 import Response from "../../system/helpers/Response";
+import { filterValidationError } from "../../system/utils";
 
 export function validateRequestBody(validationSchema) {
   return (req, res, next) => {
@@ -20,6 +20,20 @@ export function validateRequestBody(validationSchema) {
       });
     }
     req.body = results.output;
+    return next();
+  };
+}
+
+export function validateQueryParams(validationSchema) {
+  return (req, res, next) => {
+    const results = v.safeParse(validationSchema, req.query);
+    if (!results.success) {
+      return Response.error(res, 400, {
+        message: "Please correct your inputs",
+        errors: filterValidationError(results.issues),
+      });
+    }
+    req.query = results.output;
     return next();
   };
 }
