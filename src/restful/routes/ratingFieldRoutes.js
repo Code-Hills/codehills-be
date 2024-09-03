@@ -21,18 +21,8 @@ ratingFieldRouter.post(
   validateRequestBody(ratingFieldSchema),
   createRatingField
 );
-ratingFieldRouter.get(
-  "/",
-  protect,
-  allowedRole(["admin"]),
-  findAllRatingFields
-);
-ratingFieldRouter.get(
-  "/:id",
-  protect,
-  allowedRole(["admin"]),
-  findRatingFieldById
-);
+ratingFieldRouter.get("/", protect, findAllRatingFields);
+ratingFieldRouter.get("/:id", protect, findRatingFieldById);
 ratingFieldRouter.delete(
   "/:id",
   protect,
