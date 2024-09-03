@@ -22,18 +22,8 @@ ratingCategoryRouter.post(
   validateRequestBody(ratingCategorySchema),
   createRatingCategory
 );
-ratingCategoryRouter.get(
-  "/",
-  protect,
-  allowedRole(["admin"]),
-  findAllRatingCategories
-);
-ratingCategoryRouter.get(
-  "/:id",
-  protect,
-  allowedRole(["admin"]),
-  findRatingCategoryById
-);
+ratingCategoryRouter.get("/", protect, findAllRatingCategories);
+ratingCategoryRouter.get("/:id", protect, findRatingCategoryById);
 ratingCategoryRouter.patch(
   "/:id",
   protect,
