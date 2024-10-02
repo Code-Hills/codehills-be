@@ -28,6 +28,13 @@ const userProjectModel = () => {
           key: "id",
         },
       },
+      tenantId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Tenants",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,

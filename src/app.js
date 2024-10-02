@@ -34,6 +34,14 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+app.use((req, res, next) => {
+  const tenantId = req.subdomains[0]; 
+  if (!tenantId) {
+    return res.status(400).send('No tenant found');
+  }
+  req.tenantId = tenantId;
+  next();
+});
 app.use(router);
 
 const initializeDatabase = async () => {
