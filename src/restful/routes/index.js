@@ -1,6 +1,5 @@
 import { Router } from "express";
-import swaggerUi from "swagger-ui-express";
-import swaggerDoc from "./../../documentation";
+import swaggerConfig from "./../../documentation";
 import userRoutes from "./userRoutes";
 import profileRouter from "./profile";
 import uploadRoute from "./_upload";
@@ -13,11 +12,22 @@ import dashboardRouter from "./dashboard";
 import ratingCategoryRouter from "./ratingCategoryRoutes";
 import ratingFieldRouter from "./ratingFieldRoutes";
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
+const options = {
+  definition: swaggerConfig,
+  apis: ['./src/restful/routes/*.js']
+  
+};
+
+const swaggerSpec = swaggerJsdoc(options);
+
 const API_VERSION = process.env.API_VERSION || "v1";
 const url = `/api/${API_VERSION}`;
 const router = Router();
 
-router.use(`${url}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+router.use(`${url}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 router.use(`${url}/users`, userRoutes);
 router.use(`${url}/auth`, authRouter);
 router.use(`${url}/projects`, projectRouter);
