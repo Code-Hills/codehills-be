@@ -36,6 +36,11 @@ app.use(
 );
 app.use((req, res, next) => {
   const tenantId = req.subdomains[0]; 
+  const path = req.path
+  if (path.startsWith("/api/v1/users") || path.startsWith("/api/v1/auth/microsoft")) {
+    return next();
+  }
+  
   if (!tenantId) {
     return res.status(400).send('No tenant found');
   }

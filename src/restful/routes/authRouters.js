@@ -6,19 +6,17 @@ import protect from "../middlewares";
 
 const router = express.Router();
 const { loginCallback } = AuthController;
-const { HOST, CLIENTID, CLIENTSECRET } = process.env;
+const { CALLBACK_HOST, CLIENTID, CLIENTSECRET } = process.env;
 
 passport.use(
   new MicrosoftStrategy(
     {
       clientID: `${CLIENTID}`,
       clientSecret: `${CLIENTSECRET}`,
-      callbackURL: `${HOST}/api/v1/auth/microsoft/callback`,
+      callbackURL: `${CALLBACK_HOST}/api/v1/auth/microsoft/callback`,
       scope: ["user.read"],
-      // tenant: '',
     },
     async (req, accessToken, refreshToken, profile, done) => {
-      // Your code here
       const user = {
         microsoftId: profile.id,
         firstName: profile.name.givenName,

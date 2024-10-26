@@ -9,6 +9,7 @@ import search from "./search";
 import dashboard from "./auth/dashboard";
 import ratingCategories from "./ratingCategory";
 import ratingFields from "./ratingField";
+import tenants from "./Tenants";
 
 const defaults = swaggerDoc.paths;
 
@@ -32,6 +33,7 @@ const paths = {
   ...search,
   ...ratingCategories,
   ...ratingFields,
+  ...tenants
 };
 
 const config = {

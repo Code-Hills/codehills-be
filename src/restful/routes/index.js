@@ -11,6 +11,7 @@ import searchRouter from "./searchRouter";
 import dashboardRouter from "./dashboard";
 import ratingCategoryRouter from "./ratingCategoryRoutes";
 import ratingFieldRouter from "./ratingFieldRoutes";
+import tenantRouter from "./tenants";
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
@@ -39,6 +40,7 @@ router.use(`${url}/search`, searchRouter);
 router.use(`${url}/dashboard`, dashboardRouter);
 router.use(`${url}/ratingCategories`, ratingCategoryRouter);
 router.use(`${url}/ratingFields`, ratingFieldRouter);
+router.use(`${url}/tenants`, tenantRouter);
 
 router.all(`${url}/`, (req, res) => {
   return res.status(200).json({ message: "Welcome to codehills backend!" });
