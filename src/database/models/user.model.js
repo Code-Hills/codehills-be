@@ -34,6 +34,13 @@ const UserModel = () => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
+      tenantId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Tenants",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,

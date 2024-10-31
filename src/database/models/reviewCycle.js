@@ -34,6 +34,13 @@ const ReviewCycleModel = () => {
         type: DataTypes.DATE,
         defaultValue: new Date(),
       },
+      tenantId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Tenants",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,

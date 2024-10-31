@@ -18,6 +18,13 @@ const RatingCategoryModel = () => {
         unique: true,
         allowNull: false,
       },
+      tenantId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Tenants",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,

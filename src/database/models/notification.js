@@ -29,6 +29,13 @@ const NotificationModel = () => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      tenantId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "Tenants",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,

@@ -1,6 +1,5 @@
 import { Router } from "express";
-import swaggerUi from "swagger-ui-express";
-import swaggerDoc from "./../../documentation";
+import swaggerConfig from "./../../documentation";
 import userRoutes from "./userRoutes";
 import profileRouter from "./profile";
 import uploadRoute from "./_upload";
@@ -12,12 +11,24 @@ import searchRouter from "./searchRouter";
 import dashboardRouter from "./dashboard";
 import ratingCategoryRouter from "./ratingCategoryRoutes";
 import ratingFieldRouter from "./ratingFieldRoutes";
+import tenantRouter from "./tenants";
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
+const options = {
+  definition: swaggerConfig,
+  apis: ['./src/restful/routes/*.js']
+  
+};
+
+const swaggerSpec = swaggerJsdoc(options);
 
 const API_VERSION = process.env.API_VERSION || "v1";
 const url = `/api/${API_VERSION}`;
 const router = Router();
 
-router.use(`${url}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+router.use(`${url}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 router.use(`${url}/users`, userRoutes);
 router.use(`${url}/auth`, authRouter);
 router.use(`${url}/projects`, projectRouter);
@@ -29,6 +40,7 @@ router.use(`${url}/search`, searchRouter);
 router.use(`${url}/dashboard`, dashboardRouter);
 router.use(`${url}/ratingCategories`, ratingCategoryRouter);
 router.use(`${url}/ratingFields`, ratingFieldRouter);
+router.use(`${url}/tenants`, tenantRouter);
 
 router.all(`${url}/`, (req, res) => {
   return res.status(200).json({ message: "Welcome to codehills backend!" });

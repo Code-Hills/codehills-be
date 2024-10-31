@@ -65,11 +65,11 @@ export default class DashboardService {
       where: { role: "developer" },
     });
 
-    dashboard.totalReceivedReviews = await DB.Review.count({
-      where: userRole === "admin" ? {} : { revieweeId: userId },
+    dashboard.totalReceivedReviews = await DB.Reviewer.count({
+      where: userRole === "admin" ? {} : { developerId: userId },
     });
 
-    dashboard.totalReviews = await DB.Review.count({
+    dashboard.totalReviews = await DB.Reviewer.count({
       where: userRole === "admin" ? {} : { reviewerId: userId },
     });
 

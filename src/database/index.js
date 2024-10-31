@@ -10,6 +10,7 @@ import reviewerModel from "./models/reviewer";
 import RatingCategoryModel from "./models/ratingCategory";
 import RatingFieldModel from "./models/ratingField";
 import FieldReviewModel from "./models/fieldReview";
+import TenantsModel from "./models/tenants"
 
 const DB = {
   sequelize, // connection instance (RAW queries)
@@ -24,6 +25,7 @@ const DB = {
   RatingCategory: RatingCategoryModel(sequelize),
   RatingField: RatingFieldModel(sequelize),
   FieldReview: FieldReviewModel(sequelize),
+  Tenants: TenantsModel(sequelize)
 };
 
 export default DB;
