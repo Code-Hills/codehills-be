@@ -2,10 +2,10 @@ import Response from "./../../system/helpers/Response";
 import DB from "./../../database";
 import UserService from "../../services/userService";
 import { fileUploader } from "../../system/fileUploader";
-import notificationService from "../../services/notificationService";
+import NotificationService from "../../services/notificationService";
 import sendEmail from "../../services/emailService";
 const { User } = DB;
-const { createNotification } = notificationService;
+const { createNotification } = NotificationService;
 
 export default class UserControllers {
   static async addUser(req, res) {

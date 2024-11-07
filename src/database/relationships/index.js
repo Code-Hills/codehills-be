@@ -102,6 +102,10 @@ export const associate = () => {
   DB.FieldReview.belongsTo(DB.RatingField, {
     foreignKey: "ratingFieldId",
     as: "ratingField",
+  });
+  DB.Notification.belongsTo(DB.User, {
+    foreignKey: "userId",
+    as: "user",
     onDelete: "CASCADE",
   });
 };

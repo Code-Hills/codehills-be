@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import express from "express";
+import * as http from "http";
 import session from "express-session";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -8,12 +9,20 @@ import router from "./restful/routes/index";
 import fileUploader from "express-fileupload";
 import { associate } from "./database/relationships";
 import { passport } from "./restful/routes/authRouters";
+import {
+  listenToUserProjectAssigned,
+  listenToLeadProjectAssigned,
+} from "./system/utils/listenToEvent";
+import { SocketUtil } from "./system/utils/SocketUtil";
 import cronJob from "./system/utils/cronjob";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 
 const app = express();
+const server = http.createServer(app);
+SocketUtil.config(server);
 cronJob();
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
@@ -47,7 +56,7 @@ const initializeDatabase = async () => {
 const start = () => {
   try {
     initializeDatabase();
-    app.listen({ port: PORT }, () =>
+    server.listen({ port: PORT }, () =>
       process.stdout.write(`http://localhost:${PORT} \n`)
     );
   } catch (error) {
